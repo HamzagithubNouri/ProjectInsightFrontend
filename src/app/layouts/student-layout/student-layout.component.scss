@@ -1,0 +1,61 @@
+.student-layout-bg {
+  background: #F8FAFC;
+}
+
+.student-header {
+  background: #fff;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.logo-badge {
+  background: #513BF6;
+}
+
+.brand-text {
+  color: #0F0A3C;
+}
+
+.brand-accent {
+  color: #513BF6;
+}
+
+// En React, l'état actif/hover était géré en JS (onMouseEnter/onMouseLeave
+// + comparaison currentPage === page). En Angular/CSS, on gère ça nativement.
+.nav-btn {
+  background: transparent;
+  color: #5B6275;
+
+  &:hover:not(.nav-btn-active) {
+    background: #F9FAFB;
+  }
+}
+
+.nav-btn-active {
+  background: #EEF2FF;
+  color: #513BF6;
+}
+
+.bell-btn {
+  background: #F3F4F6;
+}
+
+.bell-icon {
+  color: #0F0A3C;
+}
+
+.bell-dot {
+  background: #DC2626;
+}
+
+.avatar {
+  background: linear-gradient(135deg, #16A34A, #22C55E);
+}
+
+.user-name {
+  color: #0F0A3C;
+}
+
+.user-meta,
+.chevron-icon {
+  color: #5B6275;
+}

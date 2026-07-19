@@ -1,0 +1,46 @@
+<div class="min-h-screen student-layout-bg">
+  <!-- Top nav -->
+  <header class="sticky top-0 z-40 flex items-center gap-6 px-8 py-3 student-header">
+    <div class="flex items-center gap-2.5 mr-4">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center logo-badge">
+        <lucide-icon name="cpu" [size]="16" color="#fff"></lucide-icon>
+      </div>
+      <span class="font-bold text-sm brand-text">
+        ProjectInsight <span class="brand-accent">AI</span>
+      </span>
+    </div>
+
+    <nav class="flex items-center gap-1">
+      <button
+        *ngFor="let item of navItems"
+        (click)="goTo(item.page)"
+        class="px-4 py-2 rounded-xl text-sm font-medium transition-all nav-btn"
+        [class.nav-btn-active]="isActive(item.page)"
+      >
+        {{ item.label }}
+      </button>
+    </nav>
+
+    <div class="flex-1"></div>
+
+    <button (click)="goTo('notifications')" class="relative w-9 h-9 flex items-center justify-center rounded-xl bell-btn">
+      <lucide-icon name="bell" [size]="16" class="bell-icon"></lucide-icon>
+      <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bell-dot"></span>
+    </button>
+
+    <div class="flex items-center gap-2 cursor-pointer">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-bold avatar">
+        AD
+      </div>
+      <div class="hidden md:block">
+        <p class="text-xs font-semibold user-name">Amara Diallo</p>
+        <p class="text-xs user-meta">INF3135 · Team Alpha</p>
+      </div>
+      <lucide-icon name="chevron-down" [size]="14" class="chevron-icon"></lucide-icon>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-8 py-6">
+    <router-outlet></router-outlet>
+  </main>
+</div>
