@@ -1,1 +1,18 @@
-<p>auth works!</p>
+<div class="signin-wrapper">
+  <form class="signin-card" [formGroup]="form" (ngSubmit)="submit()">
+    <h1 class="signin-title">Connexion</h1>
+ 
+    <label class="signin-label">Email</label>
+    <input class="signin-input" type="email" formControlName="email" placeholder="vous@etu.edu" />
+ 
+    <label class="signin-label">Mot de passe</label>
+    <input class="signin-input" type="password" formControlName="password" placeholder="••••••••" />
+ 
+    <p *ngIf="errorMessage" class="signin-error">{{ errorMessage }}</p>
+ 
+    <button class="signin-btn" type="submit" [disabled]="isSubmitting">
+      {{ isSubmitting ? 'Connexion...' : 'Se connecter' }}
+    </button>
+  </form>
+</div>
+ 

@@ -59,3 +59,39 @@
 .chevron-icon {
   color: #5B6275;
 }
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 6px;
+  z-index: 50;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+  background: transparent;
+  color: #0F0A3C;
+
+  &:hover {
+    background: #F9FAFB;
+  }
+}
+
+.dropdown-item-danger {
+  color: #DC2626;
+
+  &:hover {
+    background: #FEF2F2;
+  }
+}

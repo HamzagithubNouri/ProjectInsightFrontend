@@ -1,14 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StudentLayoutComponent } from './layouts/student-layout/student-layout.component';
+import { AuthGuard } from './core/guards/auth.guard';
+import { RoleGuard } from './core/guards/role.guard';
 
-// Chaque page devient un module lazy-loadé (features/xxx/xxx.module.ts).
-// Le layout agit comme "shell" avec un router-outlet pour ses enfants,
-// exactement comme {children} en React mais géré par le Router.
 const routes: Routes = [
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
+  },
   {
     path: 'student',
     component: StudentLayoutComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'student' },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
@@ -51,10 +57,31 @@ const routes: Routes = [
             (m) => m.NotificationsModule,
           ),
       },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./features/settings/settings.module').then((m) => m.SettingsModule),
+      },
     ],
   },
-  // { path: 'teacher', component: TeacherLayoutComponent, children: [...] } (même principe)
-  { path: '', redirectTo: '/student', pathMatch: 'full' },
+  {
+    path: 'teacher',
+    // component: TeacherLayoutComponent,  // a activer une fois converti
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: ['teacher', 'admin'] },
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./features/teacher-dashboard/teacher-dashboard.module').then(
+            (m) => m.TeacherDashboardModule,
+          ),
+      },
+      // ... classes, teams, students, analytics, etc. (meme pattern)
+    ],
+  },
+  { path: '', redirectTo: '/auth', pathMatch: 'full' },
 ];
 
 @NgModule({

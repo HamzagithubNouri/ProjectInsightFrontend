@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { NavigationService } from '../../core/services/navigation.service';
+import { AuthService } from '../../core/services/auth.service';
 import { NavItem, Page } from '../../core/models/page.model';
 
 const NAV_ITEMS: NavItem[] = [
@@ -18,8 +19,20 @@ const NAV_ITEMS: NavItem[] = [
 })
 export class StudentLayoutComponent {
   readonly navItems = NAV_ITEMS;
+  isMenuOpen = false;
 
-  constructor(private nav: NavigationService) {}
+  constructor(
+    private nav: NavigationService,
+    public auth: AuthService,
+    private elRef: ElementRef,
+  ) {}
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.isMenuOpen && !this.elRef.nativeElement.contains(event.target)) {
+      this.isMenuOpen = false;
+    }
+  }
 
   goTo(page: Page): void {
     this.nav.navigate(page);
@@ -27,5 +40,21 @@ export class StudentLayoutComponent {
 
   isActive(page: Page): boolean {
     return this.nav.isActive(page);
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  closeMenu(): void {
+    this.isMenuOpen = false;
+  }
+
+  logout(): void {
+    this.auth.logout(); // supprime le token + redirige vers /auth
+  }
+
+  get currentUser() {
+    return this.auth.currentUser;
   }
 }

@@ -28,15 +28,27 @@
       <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bell-dot"></span>
     </button>
 
-    <div class="flex items-center gap-2 cursor-pointer">
-      <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-bold avatar">
-        AD
+    <div class="relative">
+      <div class="flex items-center gap-2 cursor-pointer" (click)="toggleMenu()">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-bold avatar">
+          {{ auth.initials }}
+        </div>
+        <div class="hidden md:block">
+          <p class="text-xs font-semibold user-name">{{ auth.fullName }}</p>
+          <p class="text-xs user-meta">{{ currentUser?.email }}</p>
+        </div>
+        <lucide-icon name="chevron-down" [size]="14" class="chevron-icon"></lucide-icon>
       </div>
-      <div class="hidden md:block">
-        <p class="text-xs font-semibold user-name">Amara Diallo</p>
-        <p class="text-xs user-meta">INF3135 · Team Alpha</p>
+
+      <!-- Dropdown -->
+      <div *ngIf="isMenuOpen" class="user-dropdown">
+        <button class="dropdown-item" (click)="goTo('settings'); closeMenu()">
+          Paramètres
+        </button>
+        <button class="dropdown-item dropdown-item-danger" (click)="logout()">
+          Déconnexion
+        </button>
       </div>
-      <lucide-icon name="chevron-down" [size]="14" class="chevron-icon"></lucide-icon>
     </div>
   </header>
 
