@@ -1,1 +1,91 @@
-<p>ai-code-review works!</p>
+<div class="review-page">
+  <h1 class="page-title">AI Code Review</h1>
+  <p class="page-subtitle">Analyze your code with AI — get security, quality, and refactoring insights.</p>
+
+  <div class="tabs-row">
+    <button class="tab-btn" [class.tab-btn-active]="activeTab === 'paste'" (click)="setTab('paste')">
+      <lucide-icon name="code" [size]="15"></lucide-icon> Paste Code
+    </button>
+    <button class="tab-btn" [class.tab-btn-active]="activeTab === 'upload'" (click)="setTab('upload')">
+      <lucide-icon name="upload" [size]="15"></lucide-icon> Upload File
+    </button>
+  </div>
+
+  <div class="review-grid">
+    <!-- Editor -->
+    <div class="editor-card">
+      <div class="editor-topbar">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="editor-filename">{{ filename }}</span>
+      </div>
+
+      <textarea
+        *ngIf="activeTab === 'paste'"
+        class="editor-textarea"
+        [(ngModel)]="code"
+        placeholder="Colle ton code ici..."
+        spellcheck="false"
+      ></textarea>
+
+      <div *ngIf="activeTab === 'upload'" class="upload-zone">
+        <input type="file" id="file-input" class="file-input" (change)="onFileSelected($event)" />
+        <label for="file-input" class="upload-label">
+          <lucide-icon name="upload" [size]="28"></lucide-icon>
+          <span *ngIf="!selectedFile">Clique pour choisir un fichier</span>
+          <span *ngIf="selectedFile" class="upload-filename">{{ selectedFile.name }}</span>
+        </label>
+      </div>
+
+      <button class="run-btn" [disabled]="!canRun || loading" (click)="runReview()">
+        <lucide-icon name="play" [size]="15"></lucide-icon>
+        {{ loading ? 'Analyse en cours...' : 'Run AI Review' }}
+      </button>
+    </div>
+
+    <!-- Résultats -->
+    <div class="results-panel">
+      <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+      <p *ngIf="!result && !errorMessage && !loading" class="hint-text">
+        Lance une analyse pour voir les résultats ici.
+      </p>
+      <p *ngIf="loading" class="hint-text">L'IA analyse ton code...</p>
+
+      <ng-container *ngIf="result">
+        <div class="summary-bar">
+          <lucide-icon name="shield-check" [size]="15" color="#513BF6"></lucide-icon>
+          {{ result.findings.length }} findings · {{ result.critical_count }} critical ·
+          {{ result.high_count }} high · {{ result.medium_count }} medium · {{ result.low_count }} low
+        </div>
+
+        <div class="findings-list">
+          <div class="finding-card" *ngFor="let f of result.findings; let i = index">
+            <div class="finding-header" (click)="toggleFinding(i)">
+              <span class="severity-badge" [class]="'severity-' + f.severity">{{ severityLabel(f.severity) }}</span>
+              <span class="finding-title">{{ f.title }}</span>
+              <span class="finding-line">:{{ f.line_start }}-{{ f.line_end }}</span>
+            </div>
+
+            <div class="finding-body" *ngIf="expandedIndex === i">
+              <p class="finding-description">{{ f.description }}</p>
+
+              <ng-container *ngIf="f.suggested_fix">
+                <p class="fix-label">Suggested fix:</p>
+                <pre class="fix-code">{{ f.suggested_fix }}</pre>
+                <div class="fix-actions">
+                  <button class="btn-copy" (click)="copyFix(f.suggested_fix)">
+                    <lucide-icon name="copy" [size]="13"></lucide-icon> Copy
+                  </button>
+                  <button class="btn-apply" [disabled]="activeTab !== 'paste'" (click)="applyFix(i)">
+                    <lucide-icon name="wand-2" [size]="13"></lucide-icon> Apply Fix
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

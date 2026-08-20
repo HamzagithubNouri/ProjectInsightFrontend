@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { TeamMeService } from './team-me.service';
 
 export type UserRole = 'admin' | 'teacher' | 'student';
 
@@ -35,6 +36,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private teamMe: TeamMeService,
   ) {}
 
   get currentUser(): AuthUser | null {
@@ -58,6 +60,7 @@ export class AuthService {
    * Puis on enchaîne avec GET /auth/me pour récupérer le profil complet.
    */
   login(email: string, password: string): Observable<AuthUser> {
+    this.teamMe.clearCache(); // évite de réutiliser les données d'équipe d'un compte précédent
     const body = new HttpParams()
       .set('username', email)
       .set('password', password);
@@ -85,6 +88,7 @@ export class AuthService {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     this.currentUserSubject.next(null);
+    this.teamMe.clearCache(); // sinon le prochain compte connecté hérite de cette équipe en cache
     this.router.navigateByUrl('/auth');
   }
 

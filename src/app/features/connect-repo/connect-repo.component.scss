@@ -1,0 +1,272 @@
+.hint-text {
+  font-size: 14px;
+  color: #5B6275;
+}
+
+.error-text {
+  font-size: 14px;
+  color: #DC2626;
+  margin-bottom: 12px;
+}
+
+.repo-page {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-weight: 700;
+  font-size: 24px;
+  color: #0F0A3C;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: #5B6275;
+  margin-top: 4px;
+  margin-bottom: 20px;
+}
+
+.step-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  margin-bottom: 16px;
+}
+
+.step-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #0F0A3C;
+  margin-bottom: 14px;
+}
+
+.github-connected-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #F0FDF4;
+  margin-bottom: 12px;
+}
+
+.github-connected-text {
+  flex: 1;
+
+  .ok {
+    font-size: 13px;
+    font-weight: 600;
+    color: #16A34A;
+  }
+
+  .muted {
+    font-size: 12px;
+    color: #5B6275;
+  }
+}
+
+.btn-link-danger {
+  font-size: 12px;
+  font-weight: 600;
+  color: #DC2626;
+  border: 1.5px solid #FCA5A5;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.btn-github {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #0F0A3C;
+
+  &:hover {
+    background: #190F5B;
+  }
+}
+
+.repo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.repo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #E5E7EB;
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #0F0A3C;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #C7D2FE;
+  }
+}
+
+.repo-row-selected {
+  border-color: #513BF6;
+  background: #EEF2FF;
+}
+
+.radio-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #D1D5DB;
+  flex-shrink: 0;
+}
+
+.radio-dot-checked {
+  border-color: #513BF6;
+  background: #513BF6;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+.manual-label {
+  font-size: 12px;
+  color: #5B6275;
+  margin-bottom: 6px;
+}
+
+.manual-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 12px;
+  border: 1.5px solid #E5E7EB;
+  outline: none;
+
+  &:focus {
+    border-color: #513BF6;
+  }
+}
+
+.branch-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.branch-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1.5px solid #E5E7EB;
+  color: #5B6275;
+  background: #fff;
+}
+
+.branch-chip-active {
+  background: #513BF6;
+  border-color: #513BF6;
+  color: #fff;
+}
+
+.step-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #513BF6;
+
+  &:hover:not(:disabled) {
+    background: #4330D8;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1.5px solid #E5E7EB;
+  color: #0F0A3C;
+  background: #fff;
+}
+
+// State 2 summary
+.summary-card {
+  padding: 4px 20px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  margin-bottom: 16px;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #F3F4F6;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.summary-label {
+  font-size: 13px;
+  color: #5B6275;
+}
+
+.summary-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0F0A3C;
+}
+
+.summary-value.ok {
+  color: #16A34A;
+}
+
+.summary-actions {
+  display: flex;
+  gap: 12px;
+}

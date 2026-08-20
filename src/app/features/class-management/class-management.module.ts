@@ -1,17 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { ClassManagementRoutingModule } from './class-management-routing.module';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import {
+  LucideAngularModule,
+  Upload,
+  Plus,
+  Search,
+  ChevronDown,
+  BookOpen,
+  Calendar,
+  Users,
+  Mail,
+  Hash,
+  MoreHorizontal,
+} from 'lucide-angular';
 import { ClassManagementComponent } from './class-management.component';
 
+const routes: Routes = [{ path: '', component: ClassManagementComponent }];
 
 @NgModule({
-  declarations: [
-    ClassManagementComponent
-  ],
+  declarations: [ClassManagementComponent],
   imports: [
     CommonModule,
-    ClassManagementRoutingModule
-  ]
+    FormsModule,
+    RouterModule.forChild(routes),
+    LucideAngularModule.pick({
+      Upload, Plus, Search, ChevronDown, BookOpen, Calendar, Users, Mail, Hash, MoreHorizontal,
+    }),
+  ],
 })
-export class ClassManagementModule { }
+export class ClassManagementModule {}

@@ -1,1 +1,118 @@
-<p>connect-repo works!</p>
+<p *ngIf="loading" class="hint-text">Chargement...</p>
+<p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+<!-- STATE 2 : repo déjà connecté, vue résumé -->
+<div class="repo-page" *ngIf="!loading && existingRepo && !editing">
+  <h1 class="page-title">Repository</h1>
+  <p class="page-subtitle">Gère le repository GitHub partagé de ton équipe.</p>
+
+  <div class="summary-card">
+    <div class="summary-row">
+      <span class="summary-label">GitHub Account</span>
+      <span class="summary-value ok"><lucide-icon name="check-circle" [size]="14"></lucide-icon> Connected</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">Repository</span>
+      <span class="summary-value">{{ existingRepo.github_url }}</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">Branch</span>
+      <span class="summary-value"><lucide-icon name="git-branch" [size]="13"></lucide-icon> {{ existingRepo.branch }}</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">Status</span>
+      <span class="summary-value ok" *ngIf="existingRepo.status === 'connected'">
+        <lucide-icon name="check-circle" [size]="14"></lucide-icon> Connected
+      </span>
+    </div>
+    <div class="summary-row" *ngIf="existingRepo.connected_at">
+      <span class="summary-label">Last Synchronization</span>
+      <span class="summary-value">{{ existingRepo.connected_at | date: 'medium' }}</span>
+    </div>
+  </div>
+
+  <div class="summary-actions">
+    <button class="btn-primary" [disabled]="isSyncing" (click)="syncNow()">
+      <lucide-icon name="refresh-cw" [size]="15"></lucide-icon>
+      {{ isSyncing ? 'Synchronisation...' : 'Sync Now' }}
+    </button>
+    <button class="btn-outline" (click)="startEditing()">Change Repository</button>
+    <button class="btn-outline" (click)="startEditing()">Change Branch</button>
+  </div>
+</div>
+
+<!-- STATE 1 : flux de connexion (ou "changer de repo") -->
+<div class="repo-page" *ngIf="!loading && (!existingRepo || editing)">
+  <h1 class="page-title">Connect Repository</h1>
+  <p class="page-subtitle">Link your GitHub repository to enable AI analysis and tracking.</p>
+
+  <!-- 1. GitHub connection -->
+  <div class="step-card">
+    <h2 class="step-title">1. GitHub Connection</h2>
+
+    <div class="github-connected-box" *ngIf="githubConnected">
+      <lucide-icon name="check-circle" [size]="16" color="#16A34A"></lucide-icon>
+      <div class="github-connected-text">
+        <p class="ok">Connected as {{ githubUsername }}</p>
+        <p class="muted">github.com/{{ githubUsername }}</p>
+      </div>
+      <button class="btn-link-danger" (click)="disconnectGithub()">Disconnect</button>
+    </div>
+
+    <button class="btn-github" (click)="connectGithub()">
+      <lucide-icon name="github" [size]="16"></lucide-icon>
+      {{ githubConnected ? 'Reconnect with GitHub' : 'Connect with GitHub' }}
+    </button>
+  </div>
+
+  <!-- 2. Select repository -->
+  <div class="step-card" *ngIf="githubConnected">
+    <h2 class="step-title">2. Select Repository</h2>
+
+    <div class="repo-list">
+      <div
+        *ngFor="let repo of repos"
+        class="repo-row"
+        [class.repo-row-selected]="selectedRepo?.full_name === repo.full_name"
+        (click)="selectRepo(repo)"
+      >
+        <span class="radio-dot" [class.radio-dot-checked]="selectedRepo?.full_name === repo.full_name"></span>
+        <lucide-icon name="github" [size]="15"></lucide-icon>
+        <span>{{ repo.full_name }}</span>
+      </div>
+      <p *ngIf="repos.length === 0" class="hint-text">Aucun repository trouvé sur ton compte GitHub.</p>
+    </div>
+
+    <p class="manual-label">Or enter URL manually</p>
+    <input
+      class="manual-input"
+      [(ngModel)]="manualUrl"
+      (ngModelChange)="selectedRepo = null"
+      placeholder="https://github.com/..."
+    />
+  </div>
+
+  <!-- 3. Select branch -->
+  <div class="step-card" *ngIf="githubConnected">
+    <h2 class="step-title">3. Select Branch</h2>
+    <div class="branch-chips">
+      <button
+        *ngFor="let b of branches"
+        class="branch-chip"
+        [class.branch-chip-active]="selectedBranch === b.name"
+        (click)="selectBranch(b.name)"
+      >
+        <lucide-icon name="git-branch" [size]="12"></lucide-icon> {{ b.name }}
+      </button>
+      <p *ngIf="branches.length === 0" class="hint-text">Sélectionne d'abord un repository.</p>
+    </div>
+  </div>
+
+  <div class="step-actions" *ngIf="githubConnected">
+    <button class="btn-outline flex-1">Verify Repository</button>
+    <button class="btn-primary flex-1" [disabled]="!canConnect || isConnecting" (click)="confirmConnection()">
+      <lucide-icon name="refresh-cw" [size]="15"></lucide-icon>
+      {{ isConnecting ? 'Connexion...' : 'Sync Now' }}
+    </button>
+  </div>
+</div>

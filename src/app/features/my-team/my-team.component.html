@@ -1,1 +1,66 @@
-<p>my-team works!</p>
+<p *ngIf="loading" class="hint-text">Chargement de ton équipe...</p>
+<p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+<div class="my-team-page" *ngIf="team && !loading">
+  <!-- En-tete -->
+  <div class="team-header">
+    <div>
+      <h1 class="team-title">{{ team.team_name }}</h1>
+      <p class="team-subtitle">{{ team.class_name }}</p>
+    </div>
+    <div class="repo-badge" [class.repo-badge-ok]="team.repository?.status === 'connected'">
+      <lucide-icon [name]="team.repository?.status === 'connected' ? 'check-circle' : 'x-circle'" [size]="14"></lucide-icon>
+      <span>{{ team.repository?.status === 'connected' ? 'Repository connected' : 'No repository' }}</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <p class="stat-value">{{ totalCommits }}</p>
+      <p class="stat-label">Commits</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-value">{{ totalPullRequests }}</p>
+      <p class="stat-label">Pull Requests</p>
+    </div>
+    <div class="stat-card" *ngIf="hasAiScore">
+      <p class="stat-value">--</p>
+      <p class="stat-label">AI Score</p>
+    </div>
+  </div>
+
+  <!-- Membres -->
+  <h2 class="section-title">Members</h2>
+  <div class="members-card">
+    <div class="member-row" *ngFor="let m of members">
+      <div class="member-avatar">{{ m.first_name[0] }}{{ m.last_name[0] }}</div>
+
+      <div class="member-main">
+        <div class="member-name-row">
+          <span class="member-name">{{ m.first_name }} {{ m.last_name }}</span>
+          <lucide-icon *ngIf="m.is_leader" name="crown" [size]="13" color="#EA580C"></lucide-icon>
+
+          <span class="github-status" *ngIf="m.github_linked">
+            <lucide-icon name="github" [size]="12"></lucide-icon> {{ m.github_username }}
+          </span>
+          <span class="github-status github-warn" *ngIf="!m.github_linked && !isSelf(m)">
+            <lucide-icon name="alert-triangle" [size]="12"></lucide-icon> Not linked
+          </span>
+
+          <button class="link-github-btn" *ngIf="!m.github_linked && isSelf(m)" (click)="linkGithub()">
+            <lucide-icon name="github" [size]="12"></lucide-icon> Link GitHub
+          </button>
+        </div>
+        <p class="member-role">{{ m.is_leader ? 'Leader' : 'Member' }}</p>
+      </div>
+
+      <div class="member-metrics">
+        <span class="commits-count">{{ m.commits }} commits</span>
+        <span class="contribution-pct">{{ m.github_linked ? m.percentage + '%' : '--' }}</span>
+      </div>
+    </div>
+
+    <p *ngIf="members.length === 0" class="hint-text" style="padding: 16px;">Aucun membre dans cette équipe.</p>
+  </div>
+</div>

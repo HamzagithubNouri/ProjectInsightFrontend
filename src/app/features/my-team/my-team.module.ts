@@ -1,17 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { MyTeamRoutingModule } from './my-team-routing.module';
+import { RouterModule, Routes } from '@angular/router';
+import {
+  LucideAngularModule,
+  CheckCircle,
+  XCircle,
+  Crown,
+  Github,
+  AlertTriangle,
+} from 'lucide-angular';
 import { MyTeamComponent } from './my-team.component';
 
+const routes: Routes = [{ path: '', component: MyTeamComponent }];
 
 @NgModule({
-  declarations: [
-    MyTeamComponent
-  ],
+  declarations: [MyTeamComponent],
   imports: [
     CommonModule,
-    MyTeamRoutingModule
-  ]
+    RouterModule.forChild(routes),
+    LucideAngularModule.pick({ CheckCircle, XCircle, Crown, Github, AlertTriangle }),
+  ],
 })
-export class MyTeamModule { }
+export class MyTeamModule {}

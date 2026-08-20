@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StudentLayoutComponent } from './layouts/student-layout/student-layout.component';
+import { TeacherLayoutComponent } from './layouts/teacher-layout/teacher-layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 
@@ -66,7 +67,7 @@ const routes: Routes = [
   },
   {
     path: 'teacher',
-    // component: TeacherLayoutComponent,  // a activer une fois converti
+    component: TeacherLayoutComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { role: ['teacher', 'admin'] },
     children: [
@@ -78,7 +79,26 @@ const routes: Routes = [
             (m) => m.TeacherDashboardModule,
           ),
       },
-      // ... classes, teams, students, analytics, etc. (meme pattern)
+      {
+        path: 'classes',
+        loadChildren: () =>
+          import('./features/class-management/class-management.module').then(
+            (m) => m.ClassManagementModule,
+          ),
+      },
+      {
+        path: 'teams',
+        loadChildren: () =>
+          import('./features/teams-management/teams-management.module').then(
+            (m) => m.TeamsManagementModule,
+          ),
+      },
+      {
+        path: 'students',
+        loadChildren: () =>
+          import('./features/students/students.module').then((m) => m.StudentsModule),
+      },
+      // project-details, analytics, teacher-notifications, settings: meme pattern a ajouter
     ],
   },
   { path: '', redirectTo: '/auth', pathMatch: 'full' },

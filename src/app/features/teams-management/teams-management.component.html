@@ -1,1 +1,149 @@
-<p>teams-management works!</p>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Teams</h1>
+      <p class="page-subtitle">{{ teams.length }} teams across {{ classes.length }} classes</p>
+    </div>
+    <button class="btn-primary" (click)="openModal()">
+      <lucide-icon name="plus" [size]="15"></lucide-icon> Create Team
+    </button>
+  </div>
+
+  <div class="filters-row">
+    <div class="search-box">
+      <lucide-icon name="search" [size]="14" class="search-icon"></lucide-icon>
+      <input [(ngModel)]="search" placeholder="Search teams or leaders..." />
+    </div>
+    <select class="class-select" [(ngModel)]="classFilter">
+      <option value="all">All classes</option>
+      <option *ngFor="let c of classes" [value]="c.name">{{ c.name }}</option>
+    </select>
+  </div>
+
+  <p *ngIf="loading" class="hint-text">Chargement des équipes...</p>
+  <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+  <div class="teams-grid" *ngIf="!loading">
+    <div class="team-card" *ngFor="let team of filtered" (click)="openTeam()">
+      <div class="team-card-top">
+        <div>
+          <h3 class="team-name">{{ team.name }}</h3>
+          <p class="team-class">{{ team.class_name }}</p>
+        </div>
+        <span
+          class="status-pill"
+          [style.background]="statusStyle(team.status).bg"
+          [style.color]="statusStyle(team.status).color"
+        >
+          {{ statusStyle(team.status).label }}
+        </span>
+      </div>
+
+      <p class="team-leader">
+        <lucide-icon name="crown" [size]="12" color="#EA580C"></lucide-icon>
+        {{ team.leader_name }} · {{ team.member_count }} members
+      </p>
+
+      <div class="team-stats">
+        <div class="stat-box">
+          <p class="stat-label">AI Score</p>
+          <p class="stat-value" [style.color]="scoreColor(team.ai_score)">{{ team.ai_score }}</p>
+        </div>
+        <div class="stat-box">
+          <p class="stat-label">Balance</p>
+          <p class="stat-value">{{ team.balance }}%</p>
+        </div>
+      </div>
+
+      <div class="balance-row">
+        <div class="balance-row-top">
+          <span>Contribution balance</span>
+          <span [style.color]="(team.balance ?? 0) >= 70 ? '#16A34A' : '#EA580C'">{{ team.balance }}%</span>
+        </div>
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            [style.width.%]="team.balance ?? 0"
+            [style.background]="(team.balance ?? 0) >= 70 ? '#16A34A' : '#EA580C'"
+          ></div>
+        </div>
+      </div>
+
+      <div class="team-footer">
+        <div class="repo-status" [class.repo-ok]="team.repo_connected" [class.repo-ko]="!team.repo_connected">
+          <lucide-icon [name]="team.repo_connected ? 'check-circle' : 'x-circle'" [size]="13"></lucide-icon>
+          <span>{{ team.repo_connected ? 'Repository connected' : 'No repository' }}</span>
+        </div>
+        <div class="team-actions" (click)="$event.stopPropagation()">
+          <button class="icon-btn icon-btn-purple"><lucide-icon name="user-plus" [size]="12"></lucide-icon></button>
+          <button class="icon-btn icon-btn-red"><lucide-icon name="user-minus" [size]="12"></lucide-icon></button>
+          <button class="icon-btn icon-btn-grey"><lucide-icon name="git-branch" [size]="12"></lucide-icon></button>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="filtered.length === 0" class="hint-text">Aucune équipe trouvée.</p>
+  </div>
+</div>
+
+<!-- Create Team Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header-row">
+      <h2 class="modal-title">Créer une équipe</h2>
+      <button class="modal-close-btn" (click)="closeModal()"><lucide-icon name="x" [size]="18"></lucide-icon></button>
+    </div>
+
+    <div class="modal-form">
+      <div>
+        <label>Nom de l'équipe</label>
+        <input [(ngModel)]="newTeamName" placeholder="ex: Team Zeta" />
+      </div>
+      <div>
+        <label>Classe</label>
+        <select [ngModel]="newTeamClassId" (ngModelChange)="onClassChange($event)">
+          <option *ngFor="let c of classes" [ngValue]="c.id">{{ c.name }}</option>
+        </select>
+      </div>
+      <div>
+        <div class="members-header">
+          <label>Membres</label>
+          <span *ngIf="newTeamMembers.length > 0" class="members-count">
+            {{ newTeamMembers.length }} sélectionné(s)
+          </span>
+        </div>
+        <div class="members-list">
+          <div
+            *ngFor="let s of availableStudents"
+            class="member-row"
+            [class.member-row-selected]="newTeamMembers.includes(s.id)"
+          >
+            <div class="member-checkbox" [class.member-checkbox-checked]="newTeamMembers.includes(s.id)" (click)="toggleMember(s.id)">
+              <span *ngIf="newTeamMembers.includes(s.id)">✓</span>
+            </div>
+            <span class="member-name" (click)="toggleMember(s.id)">{{ s.first_name }} {{ s.last_name }}</span>
+
+            <button
+              *ngIf="newTeamMembers.includes(s.id)"
+              type="button"
+              class="leader-badge"
+              [class.leader-badge-active]="newTeamLeaderId === s.id"
+              (click)="setLeader(s.id)"
+            >
+              <lucide-icon name="crown" [size]="12"></lucide-icon>
+              {{ newTeamLeaderId === s.id ? 'Leader' : 'Définir leader' }}
+            </button>
+          </div>
+          <p *ngIf="availableStudents.length === 0" class="hint-text">Aucun étudiant dans cette classe.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+      <button class="btn-primary flex-1" [disabled]="!newTeamName.trim() || isSaving" (click)="submitCreate()">
+        {{ isSaving ? 'Création...' : "Créer l'équipe" }}
+      </button>
+    </div>
+  </div>
+</div>

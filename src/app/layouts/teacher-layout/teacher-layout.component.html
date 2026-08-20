@@ -1,1 +1,70 @@
-<p>teacher-layout works!</p>
+<div class="teacher-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.sidebar-collapsed]="collapsed">
+    <div class="sidebar-logo">
+      <div class="logo-badge">
+        <lucide-icon name="cpu" [size]="16" color="#fff"></lucide-icon>
+      </div>
+      <span *ngIf="!collapsed" class="logo-text">
+        ProjectInsight<br /><span class="logo-accent">AI</span>
+      </span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button
+        *ngFor="let item of navItems"
+        (click)="goTo(item.route)"
+        class="nav-item"
+        [class.nav-item-active]="isActive(item.route)"
+        [title]="collapsed ? item.label : null"
+      >
+        <lucide-icon [name]="item.icon" [size]="17"></lucide-icon>
+        <span *ngIf="!collapsed">{{ item.label }}</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-logout">
+      <button class="logout-btn" (click)="logout()" [title]="collapsed ? 'Logout' : null">
+        <lucide-icon name="log-out" [size]="17"></lucide-icon>
+        <span *ngIf="!collapsed">Logout</span>
+      </button>
+    </div>
+
+    <button class="collapse-btn" (click)="toggleCollapsed()">
+      <lucide-icon name="chevron-left" [size]="16" [class.rotate-180]="collapsed"></lucide-icon>
+      <span *ngIf="!collapsed" class="collapse-label">Collapse</span>
+    </button>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-area">
+    <header class="topbar">
+      <div class="breadcrumb">
+        <span *ngFor="let crumb of breadcrumb; let last = last; let first = first" class="breadcrumb-item">
+          <lucide-icon *ngIf="!first" name="chevron-down" [size]="12" class="breadcrumb-sep"></lucide-icon>
+          <span [class.breadcrumb-current]="last">{{ crumb }}</span>
+        </span>
+      </div>
+
+      <div class="flex-spacer"></div>
+
+      <div class="search-box">
+        <lucide-icon name="search" [size]="15" class="search-icon"></lucide-icon>
+        <input type="text" placeholder="Search projects or students..." [(ngModel)]="search" />
+      </div>
+
+      <button class="bell-btn" (click)="goTo('/teacher/notifications')">
+        <lucide-icon name="bell" [size]="17"></lucide-icon>
+        <span class="bell-dot"></span>
+      </button>
+
+      <div class="avatar" (click)="goTo('/teacher/settings')" title="Profile settings">
+        {{ auth.initials }}
+      </div>
+    </header>
+
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

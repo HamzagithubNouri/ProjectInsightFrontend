@@ -1,1 +1,124 @@
-<p>students works!</p>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Students</h1>
+      <p class="page-subtitle">{{ students.length }} students · {{ inactiveCount }} inactive</p>
+    </div>
+    <button class="btn-primary" (click)="openModal()">
+      <lucide-icon name="plus" [size]="15"></lucide-icon> New Student
+    </button>
+  </div>
+
+  <div class="filters-row">
+    <div class="search-box">
+      <lucide-icon name="search" [size]="14" class="search-icon"></lucide-icon>
+      <input [(ngModel)]="search" placeholder="Search by name or email..." />
+    </div>
+    <select class="class-select" [(ngModel)]="classFilter">
+      <option value="all">All classes</option>
+      <option *ngFor="let c of classes" [value]="c.name">{{ c.name }}</option>
+    </select>
+  </div>
+
+  <p *ngIf="loading" class="hint-text">Chargement des étudiants...</p>
+  <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+  <div class="students-table" *ngIf="!loading">
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Email</th>
+          <th>Class</th>
+          <th>Team</th>
+          <th>Commits</th>
+          <th>AI Score</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of filtered; let i = index">
+          <td>
+            <div class="student-cell">
+              <div class="student-avatar" [style.background]="avatarColor(i)">
+                {{ s.first_name[0] }}{{ s.last_name[0] }}
+              </div>
+              <span class="student-name">{{ s.first_name }} {{ s.last_name }}</span>
+            </div>
+          </td>
+          <td class="cell-muted">{{ s.email }}</td>
+          <td><span class="class-tag">{{ s.class_name }}</span></td>
+          <td class="cell-muted">{{ s.team_name }}</td>
+          <td>
+            <div class="commits-cell">
+              <lucide-icon name="git-commit" [size]="13" color="#5B6275"></lucide-icon>
+              <span>{{ s.commits ?? 0 }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="score-cell">
+              <div class="progress-track">
+                <div
+                  class="progress-fill"
+                  [style.width.%]="s.ai_score ?? 0"
+                  [style.background]="scoreColor(s.ai_score)"
+                ></div>
+              </div>
+              <span [style.color]="scoreColor(s.ai_score)" class="score-value">{{ s.ai_score }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="status-pill" [class.status-active]="s.status === 'active'" [class.status-inactive]="s.status === 'inactive'">
+              {{ s.status === 'active' ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="filtered.length === 0" class="hint-text">Aucun étudiant trouvé.</p>
+  </div>
+</div>
+
+<!-- Add Student Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header-row">
+      <h2 class="modal-title">Ajouter un étudiant</h2>
+      <button class="modal-close-btn" (click)="closeModal()"><lucide-icon name="x" [size]="18"></lucide-icon></button>
+    </div>
+
+    <div class="modal-form">
+      <div class="modal-form-grid-2">
+        <div>
+          <label>Prénom</label>
+          <input [(ngModel)]="form.first_name" placeholder="ex: Amara" />
+        </div>
+        <div>
+          <label>Nom</label>
+          <input [(ngModel)]="form.last_name" placeholder="ex: Diallo" />
+        </div>
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" [(ngModel)]="form.email" placeholder="ex: diallo.a@etudiant.uqam.ca" />
+      </div>
+      <div>
+        <label>Mot de passe</label>
+        <input type="password" [(ngModel)]="form.password" placeholder="Mot de passe temporaire" />
+      </div>
+      <div>
+        <label>Classe</label>
+        <select [(ngModel)]="form.class_id">
+          <option *ngFor="let c of classes" [ngValue]="c.id">{{ c.name }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+      <button class="btn-primary flex-1" [disabled]="isSaving" (click)="submitAdd()">
+        {{ isSaving ? 'Ajout...' : "Ajouter l'étudiant" }}
+      </button>
+    </div>
+  </div>
+</div>

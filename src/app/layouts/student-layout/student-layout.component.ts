@@ -1,6 +1,7 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { NavigationService } from '../../core/services/navigation.service';
 import { AuthService } from '../../core/services/auth.service';
+import { TeamMeService } from '../../core/services/team-me.service';
 import { NavItem, Page } from '../../core/models/page.model';
 
 const NAV_ITEMS: NavItem[] = [
@@ -17,15 +18,28 @@ const NAV_ITEMS: NavItem[] = [
   templateUrl: './student-layout.component.html',
   styleUrls: ['./student-layout.component.scss'],
 })
-export class StudentLayoutComponent {
-  readonly navItems = NAV_ITEMS;
+export class StudentLayoutComponent implements OnInit {
   isMenuOpen = false;
+  isLeader = false;
 
   constructor(
     private nav: NavigationService,
     public auth: AuthService,
+    private team: TeamMeService,
     private elRef: ElementRef,
   ) {}
+
+  ngOnInit(): void {
+    this.team.getMyTeam().subscribe({
+      next: (myTeam) => (this.isLeader = myTeam.my_team_role === 'LEADER'),
+      error: () => (this.isLeader = false), // pas d'équipe assignée -> pas de gestion repo
+    });
+  }
+
+  // "Repository" n'apparaît que pour le Team Leader (cf. cahier des charges)
+  get navItems(): NavItem[] {
+    return this.isLeader ? NAV_ITEMS : NAV_ITEMS.filter((i) => i.page !== 'connect-repo');
+  }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
