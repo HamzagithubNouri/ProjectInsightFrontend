@@ -3,14 +3,18 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { TeamMeService, MyTeam, TeamMemberInfo } from '../../core/services/team-me.service';
 import { TeamContributionsService, MemberContribution } from '../../core/services/team-contributions.service';
+import { TeamActivityService } from '../../core/services/team-activity.service';
 import { GithubService } from '../../core/services/github.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ActivityEvent } from '../../core/models/activity.model';
 
 interface MemberRow extends TeamMemberInfo {
   commits: number;
   pull_requests: number;
   percentage: number;
 }
+
+const AVATAR_COLORS = ['#513BF6', '#16A34A', '#EA580C', '#7C5CFC', '#0891B2', '#DC2626', '#059669', '#D97706'];
 
 @Component({
   selector: 'app-my-team',
@@ -22,6 +26,7 @@ export class MyTeamComponent implements OnInit {
   members: MemberRow[] = [];
   totalCommits = 0;
   totalPullRequests = 0;
+  activity: ActivityEvent[] = [];
 
   loading = true;
   errorMessage: string | null = null;
@@ -29,6 +34,7 @@ export class MyTeamComponent implements OnInit {
   constructor(
     private teamMe: TeamMeService,
     private contributionsService: TeamContributionsService,
+    private activityService: TeamActivityService,
     private githubService: GithubService,
     public auth: AuthService,
     private route: ActivatedRoute,
@@ -37,7 +43,6 @@ export class MyTeamComponent implements OnInit {
   ngOnInit(): void {
     this.loadAll();
 
-    // Retour du callback OAuth GitHub -> rafraichit pour voir son propre statut a jour
     this.route.queryParams.subscribe((params) => {
       if (params['github'] === 'connected') {
         this.loadAll(true);
@@ -54,11 +59,13 @@ export class MyTeamComponent implements OnInit {
     forkJoin({
       team: team$,
       contributions: this.contributionsService.getContributions(),
+      activity: this.activityService.getActivity(8),
     }).subscribe({
-      next: ({ team, contributions }) => {
+      next: ({ team, contributions, activity }) => {
         this.team = team;
         this.totalCommits = contributions.total_commits;
         this.totalPullRequests = contributions.total_pull_requests;
+        this.activity = activity;
 
         const byId = new Map<number, MemberContribution>(
           contributions.contributions.map((c) => [c.student_id, c]),
@@ -74,7 +81,6 @@ export class MyTeamComponent implements OnInit {
               percentage: c?.percentage ?? 0,
             };
           })
-          // Leader en premier, puis par nombre de commits desc
           .sort((a, b) => (b.is_leader ? 1 : 0) - (a.is_leader ? 1 : 0) || b.commits - a.commits);
 
         this.loading = false;
@@ -90,7 +96,6 @@ export class MyTeamComponent implements OnInit {
     });
   }
 
-  // Un etudiant ne peut lier QUE son propre compte GitHub, jamais celui d'un coequipier
   isSelf(member: TeamMemberInfo): boolean {
     return this.auth.currentUser?.id === member.id;
   }
@@ -100,6 +105,23 @@ export class MyTeamComponent implements OnInit {
   }
 
   get hasAiScore(): boolean {
-    return false; // pas encore de route backend pour un vrai AI Score
+    return false;
+  }
+
+  // --- Activity Timeline helpers ---
+  avatarColor(initials: string): string {
+    const code = initials.charCodeAt(0) + (initials.charCodeAt(1) || 0);
+    return AVATAR_COLORS[code % AVATAR_COLORS.length];
+  }
+
+  timeAgo(dateStr: string): string {
+    const diffMs = Date.now() - new Date(dateStr).getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return "à l'instant";
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffH = Math.floor(diffMin / 60);
+    if (diffH < 24) return `${diffH}h ago`;
+    const diffD = Math.floor(diffH / 24);
+    return `${diffD}d ago`;
   }
 }

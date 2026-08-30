@@ -63,4 +63,28 @@
 
     <p *ngIf="members.length === 0" class="hint-text" style="padding: 16px;">Aucun membre dans cette équipe.</p>
   </div>
+
+  <!-- Activity Timeline -->
+  <h2 class="section-title">Activity Timeline</h2>
+  <div class="activity-card">
+    <div class="timeline-row" *ngFor="let event of activity">
+      <div class="timeline-marker">
+        <span class="timeline-dot"></span>
+        <span class="timeline-line"></span>
+      </div>
+
+      <div class="timeline-avatar" [style.background]="avatarColor(event.actor_initials)">
+        {{ event.actor_initials }}
+      </div>
+
+      <div class="timeline-text">
+        <span class="timeline-actor">{{ event.actor_name }}</span>
+        <span class="timeline-desc">{{ event.description }}</span>
+      </div>
+
+      <span class="timeline-time">{{ timeAgo(event.created_at) }}</span>
+    </div>
+
+    <p *ngIf="activity.length === 0" class="hint-text" style="padding: 16px;">Aucune activité récente.</p>
+  </div>
 </div>
