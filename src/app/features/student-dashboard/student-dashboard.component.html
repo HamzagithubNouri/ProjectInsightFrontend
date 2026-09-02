@@ -1,1 +1,83 @@
-<p>student-dashboard works!</p>
+<p *ngIf="loading" class="hint-text">Chargement du tableau de bord...</p>
+<p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+<div class="dashboard-page" *ngIf="!loading && team">
+  <div class="dashboard-header">
+    <div>
+      <h1 class="greeting">Good morning, {{ auth.currentUser?.first_name }} 👋</h1>
+      <p class="dashboard-subtitle">
+        {{ team.team_name }} · {{ team.class_name }}
+        <ng-container *ngIf="repoName"> · {{ repoName }}</ng-container>
+      </p>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-icon"><lucide-icon name="git-commit" [size]="15"></lucide-icon></span>
+      <p class="stat-value">{{ myCommits }}</p>
+      <p class="stat-label">My Commits</p>
+      <p class="stat-sub">this semester</p>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-icon"><lucide-icon name="git-pull-request" [size]="15"></lucide-icon></span>
+      <p class="stat-value">{{ myPullRequests }}</p>
+      <p class="stat-label">My Pull Requests</p>
+      <p class="stat-sub">this semester</p>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-icon"><lucide-icon name="pie-chart" [size]="15"></lucide-icon></span>
+      <p class="stat-value">{{ myContribution }}%</p>
+      <p class="stat-label">My Contribution</p>
+      <p class="stat-sub">of team commits</p>
+    </div>
+  </div>
+
+  <div class="activity-card">
+    <div class="activity-header">
+      <h2 class="section-title">My Activity This Week</h2>
+      <span class="total-badge">{{ totalCommitsThisWeek }} total commits</span>
+    </div>
+
+    <svg class="activity-chart" viewBox="0 0 680 180" *ngIf="activity.length">
+      <line x1="20" y1="20" x2="660" y2="20" class="grid-line" />
+      <line x1="20" y1="65" x2="660" y2="65" class="grid-line" />
+      <line x1="20" y1="110" x2="660" y2="110" class="grid-line" />
+      <line x1="20" y1="150" x2="660" y2="150" class="grid-line" />
+
+      <polyline [attr.points]="polylinePoints" class="activity-line" />
+
+      <g *ngFor="let a of activity; let i = index">
+        <circle [attr.cx]="pointX(i)" [attr.cy]="pointY(a.commits)" r="4" class="activity-dot" />
+        <text [attr.x]="pointX(i)" y="170" class="axis-label" text-anchor="middle">{{ a.day }}</text>
+      </g>
+    </svg>
+
+    <p *ngIf="!activity.length" class="hint-text">Aucune activité récente.</p>
+  </div>
+
+  <div class="suggestions-card">
+    <h2 class="section-title">Improvement Suggestions</h2>
+
+    <div class="suggestions-list" *ngIf="findings.length; else noFindings">
+      <div class="suggestion-row" *ngFor="let f of findings">
+        <span class="severity-dot" [style.background]="severityColor(f.severity)"></span>
+        <div class="suggestion-text">
+          <p class="suggestion-title">{{ f.title }}</p>
+          <p class="suggestion-file" *ngIf="f.filename">{{ f.filename }}</p>
+        </div>
+        <span class="severity-tag" [style.color]="severityColor(f.severity)">{{ severityLabel(f.severity) }}</span>
+      </div>
+    </div>
+
+    <ng-template #noFindings>
+      <p class="hint-text">Aucune suggestion pour le moment. Lance une AI Review pour en obtenir.</p>
+    </ng-template>
+
+    <button class="view-all-btn" (click)="goToAiReview()">
+      View all in AI Review <lucide-icon name="arrow-right" [size]="14"></lucide-icon>
+    </button>
+  </div>
+</div>

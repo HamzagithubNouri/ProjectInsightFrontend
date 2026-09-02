@@ -9,9 +9,13 @@
     <button class="tab-btn" [class.tab-btn-active]="activeTab === 'upload'" (click)="setTab('upload')">
       <lucide-icon name="upload" [size]="15"></lucide-icon> Upload File
     </button>
+    <button class="tab-btn" [class.tab-btn-active]="activeTab === 'repository'" (click)="setTab('repository')">
+      <lucide-icon name="folder" [size]="15"></lucide-icon> My Repository
+    </button>
   </div>
 
-  <div class="review-grid">
+  <!-- Paste Code / Upload File -->
+  <div class="review-grid" *ngIf="activeTab === 'paste' || activeTab === 'upload'">
     <!-- Editor -->
     <div class="editor-card">
       <div class="editor-topbar">
@@ -87,5 +91,50 @@
         </div>
       </ng-container>
     </div>
+  </div>
+
+  <!-- My Repository -->
+  <div class="repo-tab" *ngIf="activeTab === 'repository'">
+    <p *ngIf="teamLoading" class="hint-text">Chargement du repository...</p>
+    <p *ngIf="teamErrorMessage" class="error-text">{{ teamErrorMessage }}</p>
+
+    <ng-container *ngIf="!teamLoading && !teamErrorMessage">
+      <div class="repo-card" *ngIf="repository; else noRepo">
+        <h2 class="repo-card-title">Your Team Repository</h2>
+
+        <div class="repo-card-section">
+          <div class="repo-row">
+            <span class="repo-label">Repository</span>
+            <span class="repo-value ok">
+              <lucide-icon name="check-circle" [size]="14"></lucide-icon> Connected
+            </span>
+          </div>
+          <div class="repo-row">
+            <span class="repo-name">{{ repoNameOnly }}</span>
+          </div>
+          <div class="repo-row">
+            <span class="repo-label">Branch</span>
+            <span class="repo-value">
+              <lucide-icon name="git-branch" [size]="13"></lucide-icon> {{ repository.branch }}
+            </span>
+          </div>
+        </div>
+
+        <div class="repo-card-section">
+          <h3 class="repo-section-title">Pull Requests</h3>
+          <button class="btn-primary" (click)="openPullRequests()">
+            <lucide-icon name="git-pull-request" [size]="15"></lucide-icon> Open Pull Requests
+          </button>
+        </div>
+      </div>
+
+      <ng-template #noRepo>
+        <p class="hint-text">
+          Aucun repository connecté pour ton équipe.
+          <a class="repo-link" (click)="goToConnectRepo()">Connecte un repository</a>
+          pour utiliser cette fonctionnalité.
+        </p>
+      </ng-template>
+    </ng-container>
   </div>
 </div>

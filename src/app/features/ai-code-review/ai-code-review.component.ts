@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AiReviewService } from '../../core/services/ai-review.service';
 import { AiReviewResult, Severity } from '../../core/models/ai-review.model';
+import { TeamMeService, TeamRepositoryInfo } from '../../core/services/team-me.service';
 
-type Tab = 'paste' | 'upload';
+type Tab = 'paste' | 'upload' | 'repository';
 
 const SEVERITY_LABEL: Record<Severity, string> = {
   critical: 'Critical',
@@ -16,7 +18,7 @@ const SEVERITY_LABEL: Record<Severity, string> = {
   templateUrl: './ai-code-review.component.html',
   styleUrls: ['./ai-code-review.component.scss'],
 })
-export class AiCodeReviewComponent {
+export class AiCodeReviewComponent implements OnInit {
   activeTab: Tab = 'paste';
 
   // Mode "Paste Code"
@@ -31,7 +33,46 @@ export class AiCodeReviewComponent {
   result: AiReviewResult | null = null;
   expandedIndex = 0;
 
-  constructor(private aiReviewService: AiReviewService) {}
+  // Mode "My Repository"
+  teamId: number | null = null;
+  repository: TeamRepositoryInfo | null = null;
+  teamLoading = true;
+  teamErrorMessage: string | null = null;
+
+  constructor(
+    private aiReviewService: AiReviewService,
+    private teamMe: TeamMeService,
+    private router: Router,
+  ) {}
+
+  ngOnInit(): void {
+    // TeamMeService met en cache la réponse (shareReplay) : appel peu coûteux
+    // même si on ne va jamais sur l'onglet "My Repository".
+    this.loadTeamRepository();
+  }
+
+  loadTeamRepository(): void {
+    this.teamLoading = true;
+    this.teamErrorMessage = null;
+    this.teamMe.getMyTeam().subscribe({
+      next: (team) => {
+        this.teamId = team.team_id;
+        this.repository = team.repository;
+        this.teamLoading = false;
+      },
+      error: () => {
+        this.teamLoading = false;
+        this.teamErrorMessage = "Impossible de récupérer les informations d'équipe.";
+      },
+    });
+  }
+
+  get repoNameOnly(): string {
+    if (!this.repository) return '';
+    return this.repository.github_url
+      .replace('https://github.com/', '')
+      .replace('http://github.com/', '');
+  }
 
   setTab(tab: Tab): void {
     this.activeTab = tab;
@@ -98,5 +139,14 @@ export class AiCodeReviewComponent {
     const end = Math.min(lines.length, finding.line_end);
     lines.splice(start, end - start, finding.suggested_fix);
     this.code = lines.join('\n');
+  }
+
+  // --- Navigation vers la liste des Pull Requests ---
+  openPullRequests(): void {
+    this.router.navigateByUrl('/student/ai-code-review/pulls');
+  }
+
+  goToConnectRepo(): void {
+    this.router.navigateByUrl('/student/connect-repo');
   }
 }

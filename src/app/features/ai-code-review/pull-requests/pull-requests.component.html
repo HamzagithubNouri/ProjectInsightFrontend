@@ -1,0 +1,39 @@
+<div class="pr-page">
+  <button class="back-btn" (click)="goBack()">
+    <lucide-icon name="arrow-left" [size]="16"></lucide-icon> Back
+  </button>
+
+  <h1 class="page-title">Pull Requests</h1>
+  <p class="page-subtitle" *ngIf="repository">
+    Repository: {{ repoNameOnly }}<br />
+    Branch: {{ repository.branch }}
+  </p>
+
+  <p *ngIf="loading" class="hint-text">Chargement des pull requests...</p>
+  <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+  <div class="pr-list" *ngIf="!loading && !errorMessage">
+    <div class="pr-card" *ngFor="let pr of pullRequests">
+      <div class="pr-card-main">
+        <p class="pr-number-title">#{{ pr.number }} {{ pr.title }}</p>
+        <span class="pr-state" [class]="'pr-state-' + pr.state">{{ stateLabel(pr) }}</span>
+
+        <p class="pr-meta" *ngIf="!pr.already_reviewed">Created by {{ pr.author }}</p>
+        <p class="pr-meta" *ngIf="pr.already_reviewed">
+          <lucide-icon name="check-circle" [size]="12" color="#16A34A"></lucide-icon> Reviewed
+        </p>
+      </div>
+
+      <div class="pr-card-action">
+        <button *ngIf="!pr.already_reviewed" class="btn-primary" (click)="reviewPr(pr)">
+          Review PR
+        </button>
+        <button *ngIf="pr.already_reviewed" class="btn-outline" (click)="viewReview(pr)">
+          View Review
+        </button>
+      </div>
+    </div>
+
+    <p *ngIf="pullRequests.length === 0" class="hint-text">Aucune pull request trouvée.</p>
+  </div>
+</div>
