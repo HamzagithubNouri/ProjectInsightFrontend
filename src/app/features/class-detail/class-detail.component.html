@@ -1,1 +1,32 @@
-<p>class-detail works!</p>
+<div class="class-detail-page">
+  <button class="back-btn" (click)="goBack()">
+    <lucide-icon name="arrow-left" [size]="16"></lucide-icon> Back
+  </button>
+
+  <p *ngIf="loading" class="hint-text">Chargement...</p>
+  <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+  <ng-container *ngIf="classDetail && !loading">
+    <h1 class="class-title">{{ classDetail.name }}</h1>
+    <p class="class-subtitle">{{ classDetail.student_count }} Students · {{ classDetail.team_count }} Teams</p>
+
+    <h2 class="section-title">Teams</h2>
+    <div class="team-grid">
+      <div class="team-card" *ngFor="let team of classDetail.teams" (click)="openTeam(team)">
+        <h3 class="team-name">{{ team.name }}</h3>
+        <p class="team-meta">
+          <lucide-icon name="users" [size]="13"></lucide-icon> {{ team.member_count }} members
+        </p>
+        <p class="repo-status" [class.repo-ok]="team.repository_connected" [class.repo-ko]="!team.repository_connected">
+          <lucide-icon [name]="team.repository_connected ? 'check-circle' : 'alert-triangle'" [size]="13"></lucide-icon>
+          {{ team.repository_connected ? 'Repository' : 'Repository not connected' }}
+        </p>
+        <span class="view-link">
+          View Project <lucide-icon name="arrow-right" [size]="14"></lucide-icon>
+        </span>
+      </div>
+
+      <p *ngIf="classDetail.teams.length === 0" class="hint-text">Aucune équipe dans cette classe.</p>
+    </div>
+  </ng-container>
+</div>

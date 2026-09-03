@@ -3,21 +3,19 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 interface TeacherNavItem {
-  icon: string; // nom lucide
+  icon: string;
   label: string;
   route: string;
 }
 
+// Reduit aux items reellement fonctionnels dans ce workflow
+// (AI Reviews / Code Quality / Analytics / Reports retires : pas encore implementes)
 const NAV_ITEMS: TeacherNavItem[] = [
   { icon: 'layout-dashboard', label: 'Dashboard', route: '/teacher/dashboard' },
+  { icon: 'users', label: 'Teams', route: '/teacher/teams' },
   { icon: 'book-open', label: 'Classes', route: '/teacher/classes' },
   { icon: 'folder-open', label: 'Projects', route: '/teacher/projects' },
-  { icon: 'users', label: 'Teams', route: '/teacher/teams' },
   { icon: 'graduation-cap', label: 'Students', route: '/teacher/students' },
-  { icon: 'bot', label: 'AI Reviews', route: '/teacher/ai-reviews' },
-  { icon: 'shield-check', label: 'Code Quality', route: '/teacher/code-quality' },
-  { icon: 'bar-chart-3', label: 'Analytics', route: '/teacher/analytics' },
-  { icon: 'file-text', label: 'Reports', route: '/teacher/reports' },
   { icon: 'bell', label: 'Notifications', route: '/teacher/notifications' },
   { icon: 'settings', label: 'Settings', route: '/teacher/settings' },
 ];
@@ -41,9 +39,6 @@ export class TeacherLayoutComponent {
     return this.router.url.startsWith(route);
   }
 
-  // Le breadcrumb en React venait d'une prop passée par chaque page.
-  // Ici le layout est un shell avec <router-outlet>, donc on le déduit
-  // simplement du nav actif : ['Dashboard', 'Classes'] par ex.
   get breadcrumb(): string[] {
     const active = this.navItems.find((i) => this.isActive(i.route));
     return active && active.label !== 'Dashboard' ? ['Dashboard', active.label] : ['Dashboard'];

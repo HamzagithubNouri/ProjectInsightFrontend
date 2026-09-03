@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../../core/services/student.service';
 import { ClassService } from '../../core/services/class.service';
 import { Student } from '../../core/models/student.model';
-import { SchoolClass } from '../../core/models/class.model';
+import { ClassSummary } from '../../core/models/class.model';
 
 const AVATAR_COLORS = ['#513BF6', '#16A34A', '#EA580C', '#7C5CFC', '#0891B2', '#DC2626', '#059669', '#D97706'];
 
@@ -13,7 +13,7 @@ const AVATAR_COLORS = ['#513BF6', '#16A34A', '#EA580C', '#7C5CFC', '#0891B2', '#
 })
 export class StudentsComponent implements OnInit {
   students: Student[] = [];
-  classes: SchoolClass[] = [];
+  classes: ClassSummary[] = [];
   loading = true;
   errorMessage: string | null = null;
 

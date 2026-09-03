@@ -4,29 +4,31 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import {
   LucideAngularModule,
-  Upload,
   Plus,
-  Search,
-  ChevronDown,
-  BookOpen,
-  Calendar,
+  ArrowRight,
+  ArrowLeft,
   Users,
-  Mail,
-  Hash,
-  MoreHorizontal,
+  CheckCircle,
+  AlertTriangle,
 } from 'lucide-angular';
 import { ClassManagementComponent } from './class-management.component';
+import { ClassDetailComponent } from '../class-detail/class-detail.component';
 
-const routes: Routes = [{ path: '', component: ClassManagementComponent }];
+// Le param :classId est defini directement ici (pas d'inheritance de route
+// necessaire) : la page de detail vit dans le meme chunk lazy que la liste.
+const routes: Routes = [
+  { path: '', component: ClassManagementComponent },
+  { path: ':classId', component: ClassDetailComponent },
+];
 
 @NgModule({
-  declarations: [ClassManagementComponent],
+  declarations: [ClassManagementComponent, ClassDetailComponent],
   imports: [
     CommonModule,
     FormsModule,
     RouterModule.forChild(routes),
     LucideAngularModule.pick({
-      Upload, Plus, Search, ChevronDown, BookOpen, Calendar, Users, Mail, Hash, MoreHorizontal,
+      Plus, ArrowRight, ArrowLeft, Users, CheckCircle, AlertTriangle,
     }),
   ],
 })

@@ -1,15 +1,12 @@
 @import '../../shared/styles/admin-page';
 
-.class-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
 }
 
 .class-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
   padding: 20px;
   border-radius: 16px;
   background: #fff;
@@ -22,121 +19,24 @@
   }
 }
 
-.class-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  background: #EEF2FF;
-}
-
-.class-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.class-info-top {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 4px;
-}
-
 .class-name {
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 16px;
   color: #0F0A3C;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.status-pill {
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  flex-shrink: 0;
-  background: #F9FAFB;
-  color: #5B6275;
-}
-
-.status-active {
-  background: #F0FDF4;
-  color: #16A34A;
+  margin-bottom: 6px;
 }
 
 .class-meta {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 12px;
+  font-size: 13px;
   color: #5B6275;
-
-  span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+  margin-bottom: 16px;
 }
 
-.class-progress {
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.progress-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: #5B6275;
-  margin-bottom: 4px;
-}
-
-.progress-row {
+.view-link {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.progress-track {
-  width: 96px;
-  height: 6px;
-  border-radius: 999px;
-  background: #E5E7EB;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 999px;
-}
-
-.progress-value {
-  font-size: 12px;
-  font-weight: 700;
-  color: #0F0A3C;
-}
-
-.class-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.icon-btn {
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 12px;
+  gap: 6px;
+  font-size: 13px;
   font-weight: 600;
-  background: #EEF2FF;
   color: #513BF6;
-}
-
-.icon-btn-plain {
-  padding: 6px;
-  border-radius: 8px;
-  color: #5B6275;
 }

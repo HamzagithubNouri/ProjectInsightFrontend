@@ -1,1 +1,77 @@
-<p>project-details works!</p>
+<div class="project-page">
+  <button class="back-btn" (click)="goBack()">
+    <lucide-icon name="arrow-left" [size]="16"></lucide-icon> Back
+  </button>
+
+  <p *ngIf="loading" class="hint-text">Chargement du projet...</p>
+  <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+  <ng-container *ngIf="details && !loading">
+    <h1 class="page-title">Project Details</h1>
+
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">Team</span>
+        <span class="info-value">{{ details.team_name }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Class</span>
+        <span class="info-value">{{ details.class_name }}</span>
+      </div>
+    </div>
+
+    <h2 class="section-title">Repository</h2>
+    <div class="info-card">
+      <ng-container *ngIf="details.repository; else noRepo">
+        <div class="info-row">
+          <span class="info-label">Status</span>
+          <span class="info-value ok"><lucide-icon name="check-circle" [size]="14"></lucide-icon> Connected</span>
+        </div>
+        <div class="info-row">
+          <span class="repo-name">{{ repoNameOnly }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Branch</span>
+          <span class="info-value"><lucide-icon name="git-branch" [size]="13"></lucide-icon> {{ details.repository.branch }}</span>
+        </div>
+      </ng-container>
+      <ng-template #noRepo>
+        <p class="hint-text" style="padding: 12px 0;">
+          <lucide-icon name="x-circle" [size]="14" color="#DC2626"></lucide-icon> Aucun repository connecté.
+        </p>
+      </ng-template>
+    </div>
+
+    <h2 class="section-title">Members</h2>
+    <div class="info-card members-card">
+      <div class="member-row" *ngIf="leader">
+        <span class="member-name">
+          <lucide-icon name="crown" [size]="13" color="#EA580C"></lucide-icon> {{ leader.first_name }} {{ leader.last_name }}
+        </span>
+        <span class="member-role">Leader</span>
+      </div>
+      <div class="member-row" *ngFor="let m of otherMembers">
+        <span class="member-name">{{ m.first_name }} {{ m.last_name }}</span>
+        <span class="member-role">Member</span>
+      </div>
+      <p *ngIf="details.members.length === 0" class="hint-text" style="padding: 12px 0;">Aucun membre.</p>
+    </div>
+
+    <h2 class="section-title">GitHub Activity</h2>
+    <div class="stats-row">
+      <div class="stat-box">
+        <p class="stat-value">{{ details.total_commits }}</p>
+        <p class="stat-label">Commits</p>
+      </div>
+      <div class="stat-box">
+        <p class="stat-value">{{ details.total_pull_requests }}</p>
+        <p class="stat-label">Pull Requests</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">AI Review</h2>
+    <button class="btn-primary" (click)="openAiReview()">
+      <lucide-icon name="bot" [size]="15"></lucide-icon> View AI Review
+    </button>
+  </ng-container>
+</div>

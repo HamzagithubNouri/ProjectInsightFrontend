@@ -4,7 +4,7 @@ import { TeamService } from '../../core/services/team.service';
 import { ClassService } from '../../core/services/class.service';
 import { StudentService } from '../../core/services/student.service';
 import { Team } from '../../core/models/team.model';
-import { SchoolClass } from '../../core/models/class.model';
+import { ClassSummary } from '../../core/models/class.model';
 import { Student } from '../../core/models/student.model';
 
 const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }> = {
@@ -21,7 +21,7 @@ const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }>
 })
 export class TeamsManagementComponent implements OnInit {
   teams: Team[] = [];
-  classes: SchoolClass[] = [];
+  classes: ClassSummary[] = [];
   loading = true;
   errorMessage: string | null = null;
 

@@ -87,6 +87,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'projects',
+        loadChildren: () =>
+          import('./features/project-details/project-details.module').then(
+            (m) => m.ProjectDetailsModule,
+          ),
+      },
+      {
         path: 'teams',
         loadChildren: () =>
           import('./features/teams-management/teams-management.module').then(
@@ -98,7 +105,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./features/students/students.module').then((m) => m.StudentsModule),
       },
-      // project-details, analytics, teacher-notifications, settings: meme pattern a ajouter
+      // analytics, teacher-notifications, settings: meme pattern a ajouter
     ],
   },
   { path: '', redirectTo: '/auth', pathMatch: 'full' },

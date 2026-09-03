@@ -1,0 +1,57 @@
+<div class="pr-review-page">
+  <button class="back-btn" (click)="goBack()">
+    <lucide-icon name="arrow-left" [size]="16"></lucide-icon> Back
+  </button>
+
+  <p *ngIf="loading" class="hint-text">Chargement de la review...</p>
+  <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+  <ng-container *ngIf="result && !loading">
+    <h1 class="page-title">AI Review — PR #{{ result.pr_number }}</h1>
+    <p class="page-subtitle">{{ result.pr_title }}</p>
+
+    <div class="score-card">
+      <p class="score-label">Quality Score</p>
+      <p class="score-value">{{ result.overall_quality_score }} / 10</p>
+    </div>
+
+    <h2 class="section-title">Findings</h2>
+    <div class="pie-wrapper">
+      <div class="pie-chart" [style.background]="pieGradient">
+        <div class="pie-hole">
+          <span class="pie-total">{{ totalFindings }}</span>
+          <span class="pie-total-label">findings</span>
+        </div>
+      </div>
+      <div class="pie-legend">
+        <div class="legend-item"><span class="legend-dot dot-critical"></span> Critical <strong>{{ result.critical_count }}</strong></div>
+        <div class="legend-item"><span class="legend-dot dot-high"></span> High <strong>{{ result.high_count }}</strong></div>
+        <div class="legend-item"><span class="legend-dot dot-medium"></span> Medium <strong>{{ result.medium_count }}</strong></div>
+        <div class="legend-item"><span class="legend-dot dot-low"></span> Low <strong>{{ result.low_count }}</strong></div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Findings</h2>
+    <div class="findings-list">
+      <div class="finding-card" *ngFor="let item of allFindings">
+        <div class="finding-header">
+          <span class="severity-icon">{{ severityIcon(item.finding.severity) }}</span>
+          <span class="finding-title">{{ item.finding.title }}</span>
+        </div>
+        <p class="finding-location">{{ item.filename }} — line {{ item.finding.line_start }}</p>
+      </div>
+
+      <p *ngIf="allFindings.length === 0" class="hint-text">Aucun problème détecté.</p>
+    </div>
+
+    <h2 class="section-title">Summary</h2>
+    <p class="summary-text">{{ result.summary }}</p>
+
+    <ng-container *ngIf="result.recurring_issues.length > 0">
+      <h2 class="section-title">Recurring Issues</h2>
+      <ul class="recurring-list">
+        <li *ngFor="let issue of result.recurring_issues">{{ issue }}</li>
+      </ul>
+    </ng-container>
+  </ng-container>
+</div>

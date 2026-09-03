@@ -37,3 +37,13 @@ export interface PrReviewResult {
   medium_count: number;
   low_count: number;
 }
+
+// --- Coté teacher : lecture seule, jamais de nouvelle analyse LangChain ---
+export interface TeacherPrSummary {
+  number: number;
+  title: string;
+  state: string;
+  already_reviewed: boolean;
+  quality_score: number | null;
+  reviewed_at: string | null;
+}

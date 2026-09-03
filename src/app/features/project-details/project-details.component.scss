@@ -1,0 +1,134 @@
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5B6275;
+  background: transparent;
+  padding: 6px 0;
+  margin-bottom: 16px;
+
+  &:hover { color: #513BF6; }
+}
+
+.hint-text { font-size: 14px; color: #5B6275; }
+.error-text { font-size: 14px; color: #DC2626; }
+
+.page-title {
+  font-weight: 700;
+  font-size: 22px;
+  color: #0F0A3C;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #0F0A3C;
+  margin: 20px 0 10px;
+}
+
+.info-card {
+  border-radius: 16px;
+  border: 1px solid #E5E7EB;
+  background: #fff;
+  padding: 4px 18px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #F3F4F6;
+
+  &:last-child { border-bottom: none; }
+}
+
+.info-label { font-size: 13px; color: #5B6275; }
+
+.info-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0F0A3C;
+}
+
+.info-value.ok { color: #16A34A; }
+
+.repo-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 14px;
+  color: #0F0A3C;
+}
+
+.members-card { padding: 4px 18px; }
+
+.member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #F3F4F6;
+  font-size: 13px;
+
+  &:last-child { border-bottom: none; }
+}
+
+.member-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #0F0A3C;
+}
+
+.member-role {
+  font-size: 12px;
+  color: #5B6275;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 320px;
+}
+
+.stat-box {
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  text-align: center;
+}
+
+.stat-value {
+  font-weight: 700;
+  font-size: 22px;
+  color: #0F0A3C;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #5B6275;
+  margin-top: 4px;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #513BF6;
+
+  &:hover { background: #4330D8; }
+}

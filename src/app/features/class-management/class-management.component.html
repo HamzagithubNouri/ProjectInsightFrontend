@@ -1,81 +1,24 @@
 <div class="page">
   <div class="page-header">
     <div>
-      <h1 class="page-title">Class Management</h1>
-      <p class="page-subtitle">{{ classes.length }} classes · {{ activeCount }} active</p>
+      <h1 class="page-title">Classes</h1>
+      <p class="page-subtitle">{{ classes.length }} classes</p>
     </div>
-    <div class="header-actions">
-      <button class="btn-secondary">
-        <lucide-icon name="upload" [size]="14"></lucide-icon> Import CSV
-      </button>
-      <button class="btn-primary" (click)="openModal()">
-        <lucide-icon name="plus" [size]="15"></lucide-icon> Create Class
-      </button>
-    </div>
-  </div>
-
-  <div class="filters-row">
-    <div class="search-box">
-      <lucide-icon name="search" [size]="14" class="search-icon"></lucide-icon>
-      <input [(ngModel)]="search" placeholder="Search classes..." />
-    </div>
-    <div class="filter-tabs">
-      <button
-        *ngFor="let f of filterOptions"
-        class="filter-tab"
-        [class.filter-tab-active]="filter === f"
-        (click)="filter = f"
-      >
-        {{ f }}
-      </button>
-    </div>
-    <button class="btn-outline">
-      <lucide-icon name="chevron-down" [size]="14"></lucide-icon> Semester
+    <button class="btn-primary" (click)="openModal()">
+      <lucide-icon name="plus" [size]="15"></lucide-icon> Create Class
     </button>
   </div>
 
   <p *ngIf="loading" class="hint-text">Chargement des classes...</p>
   <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
 
-  <div class="class-list" *ngIf="!loading">
-    <div class="class-card" *ngFor="let cls of filtered" (click)="openClass(cls)">
-      <div class="class-icon">
-        <lucide-icon name="book-open" [size]="18" color="#513BF6"></lucide-icon>
-      </div>
-      <div class="class-info">
-        <div class="class-info-top">
-          <h3 class="class-name">{{ cls.name }}</h3>
-          <span class="status-pill" [class.status-active]="cls.status === 'active'">
-            {{ cls.status }}
-          </span>
-        </div>
-        <div class="class-meta">
-          <span><lucide-icon name="calendar" [size]="12"></lucide-icon> {{ cls.year }}</span>
-          <span><lucide-icon name="users" [size]="12"></lucide-icon> {{ cls.student_count ?? 0 }} students</span>
-          <span><lucide-icon name="users" [size]="12"></lucide-icon> {{ cls.team_count ?? 0 }} teams</span>
-        </div>
-      </div>
-      <div class="class-progress">
-        <p class="progress-label">Progress</p>
-        <div class="progress-row">
-          <div class="progress-track">
-            <div
-              class="progress-fill"
-              [style.width.%]="cls.progress ?? 0"
-              [style.background]="progressColor(cls.progress)"
-            ></div>
-          </div>
-          <span class="progress-value">{{ cls.progress ?? 0 }}%</span>
-        </div>
-      </div>
-      <div class="class-actions" (click)="$event.stopPropagation()">
-        <button class="icon-btn"><lucide-icon name="mail" [size]="12"></lucide-icon></button>
-        <button class="icon-btn"><lucide-icon name="hash" [size]="12"></lucide-icon></button>
-        <button class="icon-btn-plain"><lucide-icon name="more-horizontal" [size]="15"></lucide-icon></button>
-      </div>
+  <div class="class-grid" *ngIf="!loading">
+    <div class="class-card" *ngFor="let cls of classes" (click)="openClass(cls)">
+      <h3 class="class-name">{{ cls.name }}</h3>
+      <p class="class-meta">{{ cls.student_count }} students · {{ cls.team_count }} teams</p>
+      <span class="view-link">View Class <lucide-icon name="arrow-right" [size]="14"></lucide-icon></span>
     </div>
-
-    <p *ngIf="filtered.length === 0" class="hint-text">Aucune classe trouvée.</p>
+    <p *ngIf="classes.length === 0" class="hint-text">Aucune classe pour le moment.</p>
   </div>
 </div>
 

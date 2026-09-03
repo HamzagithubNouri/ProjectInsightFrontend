@@ -1,0 +1,98 @@
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5B6275;
+  background: transparent;
+  padding: 6px 0;
+  margin-bottom: 16px;
+
+  &:hover { color: #513BF6; }
+}
+
+.hint-text { font-size: 14px; color: #5B6275; }
+.error-text { font-size: 14px; color: #DC2626; }
+
+.page-title {
+  font-weight: 700;
+  font-size: 22px;
+  color: #0F0A3C;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: #5B6275;
+  margin-top: 4px;
+}
+
+.section-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #0F0A3C;
+  margin: 20px 0 12px;
+}
+
+.pr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pr-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+}
+
+.pr-main { flex: 1; min-width: 0; }
+
+.pr-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #0F0A3C;
+  margin-bottom: 6px;
+}
+
+.pr-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #16A34A;
+  margin-bottom: 4px;
+}
+
+.pr-status.not-reviewed { color: #5B6275; }
+
+.pr-score {
+  font-size: 12px;
+  color: #5B6275;
+}
+
+.btn-outline {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid #E5E7EB;
+  color: #0F0A3C;
+  background: #fff;
+
+  &:hover:not(.btn-disabled) {
+    border-color: #513BF6;
+    color: #513BF6;
+  }
+}
+
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

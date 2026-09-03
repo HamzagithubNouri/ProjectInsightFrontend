@@ -1,0 +1,90 @@
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5B6275;
+  background: transparent;
+  padding: 6px 0;
+  margin-bottom: 16px;
+
+  &:hover { color: #513BF6; }
+}
+
+.hint-text { font-size: 14px; color: #5B6275; }
+.error-text { font-size: 14px; color: #DC2626; }
+
+.class-title {
+  font-weight: 700;
+  font-size: 24px;
+  color: #0F0A3C;
+}
+
+.class-subtitle {
+  font-size: 14px;
+  color: #5B6275;
+  margin-top: 4px;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #0F0A3C;
+  margin-bottom: 12px;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.team-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  cursor: pointer;
+  transition: border-color 0.15s;
+
+  &:hover { border-color: #513BF6; }
+}
+
+.team-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #0F0A3C;
+  margin-bottom: 6px;
+}
+
+.team-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #5B6275;
+  margin-bottom: 6px;
+}
+
+.repo-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.repo-ok { color: #16A34A; }
+.repo-ko { color: #EA580C; }
+
+.view-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #513BF6;
+}
