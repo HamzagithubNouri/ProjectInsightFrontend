@@ -108,8 +108,11 @@ The root routing (`app-routing.module.ts`) separates the `/student` and `/teache
 ```bash
 git clone https://github.com/HamzagithubNouri/ProjectInsightFrontend.git
 cd ProjectInsightFrontend
+git checkout develop
 npm install
 ```
+ 
+> ⚠️ The project is currently developed on the `develop` branch, not yet merged into `main`. Make sure to check it out before installing dependencies.
  
 ## Configuration
  
