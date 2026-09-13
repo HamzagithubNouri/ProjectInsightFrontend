@@ -1,150 +1,74 @@
 @import '../../shared/styles/admin-page';
 
-.teams-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+// --- Liste simplifiee des teams ---
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.team-card {
-  padding: 20px;
+.team-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
   border-radius: 16px;
   background: #fff;
   border: 1px solid #E5E7EB;
-  cursor: pointer;
-  transition: border-color 0.15s;
-
-  &:hover {
-    border-color: #513BF6;
-  }
 }
 
-.team-card-top {
+.team-row-info {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 12px;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
 }
 
-.team-name {
+.team-row-name {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   color: #0F0A3C;
 }
 
-.team-class {
-  font-size: 12px;
+.team-row-meta {
+  font-size: 13px;
+  color: #5B6275;
   margin-top: 2px;
-  color: #5B6275;
 }
 
-.team-leader {
+.team-row-actions {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: #5B6275;
-  margin-bottom: 16px;
-}
-
-.team-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  margin-bottom: 16px;
+  flex-shrink: 0;
 }
 
-.stat-box {
-  padding: 10px;
-  border-radius: 12px;
-  background: #F9FAFB;
-}
-
-.stat-label {
-  font-size: 12px;
-  color: #5B6275;
-}
-
-.stat-value {
-  font-weight: 700;
-  font-size: 18px;
-  color: #0F0A3C;
-}
-
-.balance-row {
-  margin-bottom: 16px;
-}
-
-.balance-row-top {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  margin-bottom: 4px;
-  color: #5B6275;
-
-  span:last-child {
-    font-weight: 600;
-  }
-}
-
-.progress-track {
-  width: 100%;
-  height: 6px;
-  border-radius: 999px;
-  background: #E5E7EB;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 999px;
-}
-
-.team-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.repo-status {
+.action-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid transparent;
 }
 
-.repo-ok {
-  color: #16A34A;
-}
-
-.repo-ko {
-  color: #DC2626;
-}
-
-.team-actions {
-  display: flex;
-  gap: 4px;
-}
-
-.icon-btn {
-  padding: 6px;
-  border-radius: 8px;
-}
-
-.icon-btn-purple {
+.action-add {
   background: #EEF2FF;
   color: #513BF6;
+
+  &:hover { background: #E0E7FF; }
 }
 
-.icon-btn-red {
+.action-remove {
   background: #FEF2F2;
   color: #DC2626;
+
+  &:hover { background: #FEE2E2; }
 }
 
-.icon-btn-grey {
-  background: #F9FAFB;
-  color: #5B6275;
-}
-
+// --- Create Team modal (inchange) ---
 .members-header {
   display: flex;
   align-items: center;
@@ -178,9 +102,7 @@
   padding: 8px 12px;
   border-radius: 8px;
 
-  &:hover {
-    background: #F9FAFB;
-  }
+  &:hover { background: #F9FAFB; }
 }
 
 .member-name {
@@ -200,10 +122,7 @@
   color: #5B6275;
   flex-shrink: 0;
 
-  &:hover {
-    background: #FFF7ED;
-    color: #EA580C;
-  }
+  &:hover { background: #FFF7ED; color: #EA580C; }
 }
 
 .leader-badge-active {
@@ -213,10 +132,7 @@
 
 .member-row-selected {
   background: #EEF2FF;
-
-  &:hover {
-    background: #EEF2FF;
-  }
+  &:hover { background: #EEF2FF; }
 }
 
 .member-checkbox {
@@ -235,4 +151,114 @@
 .member-checkbox-checked {
   background: #513BF6;
   border-color: #513BF6;
+}
+
+// --- Add / Remove Member modals ---
+.modal-subtitle {
+  font-size: 13px;
+  color: #5B6275;
+  margin: -8px 0 16px;
+}
+
+.modal-search-box {
+  position: relative;
+  margin-bottom: 16px;
+
+  input {
+    width: 100%;
+    padding: 10px 14px 10px 36px;
+    font-size: 14px;
+    border-radius: 12px;
+    border: 1.5px solid #E5E7EB;
+    outline: none;
+
+    &:focus { border-color: #513BF6; }
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #5B6275;
+  }
+}
+
+.selectable-list-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #5B6275;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+
+.selectable-list {
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.selectable-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 8px;
+  border-bottom: 1px solid #F3F4F6;
+  cursor: pointer;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #FAFAFA; }
+}
+
+.selectable-row-active {
+  background: #EEF2FF;
+  &:hover { background: #EEF2FF; }
+}
+
+.selectable-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0F0A3C;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.selectable-email {
+  font-size: 12px;
+  color: #5B6275;
+  margin-top: 2px;
+}
+
+.radio-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #D1D5DB;
+  flex-shrink: 0;
+}
+
+.radio-dot-checked {
+  border-color: #513BF6;
+  background: #513BF6;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+.radio-dot-danger.radio-dot-checked {
+  border-color: #DC2626;
+  background: #DC2626;
+}
+
+.btn-danger {
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #DC2626;
+
+  &:hover:not(:disabled) { background: #B91C1C; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
 }

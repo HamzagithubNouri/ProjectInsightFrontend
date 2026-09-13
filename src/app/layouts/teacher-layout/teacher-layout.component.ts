@@ -16,7 +16,6 @@ const NAV_ITEMS: TeacherNavItem[] = [
   { icon: 'book-open', label: 'Classes', route: '/teacher/classes' },
   { icon: 'folder-open', label: 'Projects', route: '/teacher/projects' },
   { icon: 'graduation-cap', label: 'Students', route: '/teacher/students' },
-  { icon: 'bell', label: 'Notifications', route: '/teacher/notifications' },
   { icon: 'settings', label: 'Settings', route: '/teacher/settings' },
 ];
 

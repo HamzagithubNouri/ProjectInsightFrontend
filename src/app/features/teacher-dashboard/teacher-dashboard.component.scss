@@ -97,3 +97,90 @@
   font-size: 13px;
   color: #5B6275;
 }
+
+.pie-section {
+  margin-bottom: 28px;
+}
+
+.pie-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+}
+
+.pie-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.pie-chart {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pie-hole {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pie-total {
+  font-weight: 700;
+  font-size: 20px;
+  color: #0F0A3C;
+}
+
+.pie-total-label {
+  font-size: 11px;
+  color: #5B6275;
+}
+
+.pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #0F0A3C;
+
+  strong {
+    margin-left: auto;
+  }
+}
+
+.legend-name {
+  flex: 1;
+}
+
+.legend-pct {
+  font-size: 12px;
+  color: #5B6275;
+  min-width: 36px;
+  text-align: right;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

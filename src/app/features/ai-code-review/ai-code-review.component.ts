@@ -21,11 +21,8 @@ const SEVERITY_LABEL: Record<Severity, string> = {
 export class AiCodeReviewComponent implements OnInit {
   activeTab: Tab = 'paste';
 
-  // Mode "Paste Code"
   code = '';
   filename = 'untitled.py';
-
-  // Mode "Upload File"
   selectedFile: File | null = null;
 
   loading = false;
@@ -33,7 +30,12 @@ export class AiCodeReviewComponent implements OnInit {
   result: AiReviewResult | null = null;
   expandedIndex = 0;
 
-  // Mode "My Repository"
+  // --- Apply Fix : etat par finding, cle = index du finding ---
+  applyingFixIndex: number | null = null;
+  applyFixError: string | null = null;
+  applyFixSuccessIndex: number | null = null;
+
+  // My Repository
   teamId: number | null = null;
   repository: TeamRepositoryInfo | null = null;
   teamLoading = true;
@@ -46,14 +48,11 @@ export class AiCodeReviewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // TeamMeService met en cache la réponse (shareReplay) : appel peu coûteux
-    // même si on ne va jamais sur l'onglet "My Repository".
     this.loadTeamRepository();
   }
 
   loadTeamRepository(): void {
     this.teamLoading = true;
-    this.teamErrorMessage = null;
     this.teamMe.getMyTeam().subscribe({
       next: (team) => {
         this.teamId = team.team_id;
@@ -95,6 +94,8 @@ export class AiCodeReviewComponent implements OnInit {
     this.loading = true;
     this.errorMessage = null;
     this.result = null;
+    this.applyFixError = null;
+    this.applyFixSuccessIndex = null;
 
     const request$ =
       this.activeTab === 'paste'
@@ -129,19 +130,39 @@ export class AiCodeReviewComponent implements OnInit {
     navigator.clipboard?.writeText(fix);
   }
 
+  // --- Apply Fix : appelle POST /ai-review/fix et remplace TOUT l'editeur
+  // par le corrected_code retourne. Ne touche plus jamais a suggested_fix,
+  // qui reste affiche comme texte informatif uniquement. ---
   applyFix(index: number): void {
-    if (!this.result) return;
-    const finding = this.result.findings[index];
-    if (!finding.suggested_fix || this.activeTab !== 'paste') return;
+    if (this.activeTab !== 'paste' || !this.code.trim()) return;
 
-    const lines = this.code.split('\n');
-    const start = Math.max(0, finding.line_start - 1);
-    const end = Math.min(lines.length, finding.line_end);
-    lines.splice(start, end - start, finding.suggested_fix);
-    this.code = lines.join('\n');
+    this.applyingFixIndex = index;
+    this.applyFixError = null;
+    this.applyFixSuccessIndex = null;
+
+    this.aiReviewService.generateFix(this.code, this.filename).subscribe({
+      next: (res) => {
+        this.code = res.corrected_code;
+        this.applyingFixIndex = null;
+        this.applyFixSuccessIndex = index;
+
+        // Le fix regenere TOUT le fichier : les anciens findings ne
+        // correspondent plus forcement au nouveau code, on les efface
+        // pour eviter d'afficher des lignes obsoletes.
+        this.result = null;
+        this.expandedIndex = 0;
+      },
+      error: (err) => {
+        this.applyingFixIndex = null;
+        this.applyFixError =
+          err?.status === 503
+            ? "Le service d'analyse IA est indisponible."
+            : 'Impossible de générer une version corrigée.';
+      },
+    });
   }
 
-  // --- Navigation vers la liste des Pull Requests ---
+  // --- My Repository ---
   openPullRequests(): void {
     this.router.navigateByUrl('/student/ai-code-review/pulls');
   }

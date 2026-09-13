@@ -1,0 +1,41 @@
+.admin-shell {
+  min-height: 100vh;
+  background: #F8FAFC;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  background: #fff;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; }
+.logo-badge {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: #513BF6; display: flex; align-items: center; justify-content: center;
+}
+.brand-text { font-weight: 700; font-size: 14px; color: #0F0A3C; }
+.brand-accent { color: #513BF6; }
+.flex-spacer { flex: 1; }
+
+.avatar {
+  width: 34px; height: 34px; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  background: #513BF6; color: #fff; font-weight: 700; font-size: 13px;
+}
+
+.logout-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 10px;
+  font-size: 13px; font-weight: 600;
+  color: #DC2626; background: #FEF2F2;
+}
+
+.admin-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}

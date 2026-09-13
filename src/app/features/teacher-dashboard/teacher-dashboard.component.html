@@ -17,12 +17,37 @@
     </div>
   </div>
 
+  <p *ngIf="loading" class="hint-text">Chargement...</p>
+
+  <!-- Pie chart : Répartition des équipes par classe -->
+  <div class="pie-section" *ngIf="!loading && classes.length > 0">
+    <h2 class="section-title">the distribution of teams by class </h2>
+
+    <div class="pie-card">
+      <div class="pie-wrapper">
+        <div class="pie-chart" [style.background]="pieGradient">
+          <div class="pie-hole">
+            <span class="pie-total">{{ totalTeams }}</span>
+            <span class="pie-total-label">teams</span>
+          </div>
+        </div>
+
+        <div class="pie-legend">
+          <div class="legend-item" *ngFor="let slice of pieSlices">
+            <span class="legend-dot" [style.background]="slice.color"></span>
+            <span class="legend-name">{{ slice.name }}</span>
+            <strong>{{ slice.team_count }}</strong>
+            <span class="legend-pct">{{ slice.percentage }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="section-header">
     <h2 class="section-title">Your Classes</h2>
     <button class="btn-outline" (click)="goToClasses()">View All</button>
   </div>
-
-  <p *ngIf="loading" class="hint-text">Chargement...</p>
 
   <div class="class-grid" *ngIf="!loading">
     <div class="class-card" *ngFor="let cls of classes" (click)="openClass(cls)">

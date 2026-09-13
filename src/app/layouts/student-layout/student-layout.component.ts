@@ -9,8 +9,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'My Team', page: 'my-team', route: '/student/my-team' },
   { label: 'Repository', page: 'connect-repo', route: '/student/connect-repo' },
   { label: 'AI Review', page: 'ai-code-review', route: '/student/ai-code-review' },
-  { label: 'Reports', page: 'analysis-history', route: '/student/analysis-history' },
-  { label: 'Notifications', page: 'notifications', route: '/student/notifications' },
+  
 ];
 
 @Component({

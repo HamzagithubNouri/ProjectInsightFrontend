@@ -77,12 +77,26 @@
               <ng-container *ngIf="f.suggested_fix">
                 <p class="fix-label">Suggested fix:</p>
                 <pre class="fix-code">{{ f.suggested_fix }}</pre>
+
+                <p *ngIf="applyFixError && applyingFixIndex === null" class="apply-fix-error">
+                  {{ applyFixError }}
+                </p>
+                <p *ngIf="applyFixSuccessIndex === i" class="apply-fix-success">
+                  <lucide-icon name="check-circle" [size]="13" color="#16A34A"></lucide-icon>
+                  Code corrigé appliqué dans l'éditeur.
+                </p>
+
                 <div class="fix-actions">
                   <button class="btn-copy" (click)="copyFix(f.suggested_fix)">
                     <lucide-icon name="copy" [size]="13"></lucide-icon> Copy
                   </button>
-                  <button class="btn-apply" [disabled]="activeTab !== 'paste'" (click)="applyFix(i)">
-                    <lucide-icon name="wand-2" [size]="13"></lucide-icon> Apply Fix
+                  <button
+                    class="btn-apply"
+                    [disabled]="activeTab !== 'paste' || applyingFixIndex === i"
+                    (click)="applyFix(i)"
+                  >
+                    <lucide-icon name="wand-2" [size]="13"></lucide-icon>
+                    {{ applyingFixIndex === i ? 'Correction en cours...' : 'Apply Fix' }}
                   </button>
                 </div>
               </ng-container>

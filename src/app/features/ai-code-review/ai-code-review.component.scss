@@ -375,3 +375,23 @@
     background: #4330D8;
   }
 }
+
+.apply-fix-error {
+  font-size: 12px;
+  color: #DC2626;
+  margin-bottom: 8px;
+}
+
+.apply-fix-success {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #16A34A;
+  margin-bottom: 8px;
+}
+
+.btn-apply:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

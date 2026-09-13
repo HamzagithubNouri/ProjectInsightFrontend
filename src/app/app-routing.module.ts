@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StudentLayoutComponent } from './layouts/student-layout/student-layout.component';
 import { TeacherLayoutComponent } from './layouts/teacher-layout/teacher-layout.component';
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 
@@ -106,6 +107,22 @@ const routes: Routes = [
           import('./features/students/students.module').then((m) => m.StudentsModule),
       },
       // analytics, teacher-notifications, settings: meme pattern a ajouter
+    ],
+  },
+  {
+    path: 'admin',
+    component: AdminLayoutComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'admin' },
+    children: [
+      { path: '', redirectTo: 'teachers', pathMatch: 'full' },
+      {
+        path: 'teachers',
+        loadChildren: () =>
+          import('./features/teacher-management/teacher-management.module').then(
+            (m) => m.TeacherManagementModule,
+          ),
+      },
     ],
   },
   { path: '', redirectTo: '/auth', pathMatch: 'full' },

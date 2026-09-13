@@ -17,3 +17,12 @@ export interface AiReviewResult {
   medium_count: number;
   low_count: number;
 }
+
+// Correspond exactement a AutoFixResult (backend, POST /ai-review/fix)
+export interface AutoFixResult {
+  filename?: string;
+  corrected_code: string;
+  summary_of_changes: string;
+  syntax_valid?: boolean | null;
+  syntax_note?: string | null;
+}

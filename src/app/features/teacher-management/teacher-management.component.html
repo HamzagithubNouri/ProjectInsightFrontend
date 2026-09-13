@@ -1,0 +1,103 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Teachers</h1>
+      <p class="page-subtitle">Manage and add teachers to the platform.</p>
+    </div>
+    <button class="btn-primary" (click)="openModal()">
+      <lucide-icon name="user-plus" [size]="15"></lucide-icon> Add Teacher
+    </button>
+  </div>
+
+  <div class="filters-row">
+    <div class="search-box">
+      <lucide-icon name="search" [size]="14" class="search-icon"></lucide-icon>
+      <input [(ngModel)]="search" placeholder="Search teachers..." />
+    </div>
+  </div>
+
+  <p *ngIf="loading" class="hint-text">Chargement...</p>
+  <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+  <div class="teachers-table" *ngIf="!loading">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of filtered">
+          <td class="cell-name">{{ t.first_name }} {{ t.last_name }}</td>
+          <td class="cell-muted">{{ t.email }}</td>
+          <td><span class="role-tag">Teacher</span></td>
+          <td class="cell-actions">
+            <button class="icon-btn icon-btn-edit"><lucide-icon name="pencil" [size]="14"></lucide-icon></button>
+            <button class="icon-btn icon-btn-danger" (click)="deleteTeacher(t)">
+              <lucide-icon name="trash-2" [size]="14"></lucide-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="filtered.length === 0" class="hint-text">Aucun enseignant trouvé.</p>
+  </div>
+</div>
+
+<!-- Modal Add Teacher -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header-row">
+      <div class="modal-header-left">
+        <div class="modal-icon"><lucide-icon name="user-plus" [size]="16"></lucide-icon></div>
+        <div>
+          <h2 class="modal-title">Add Teacher</h2>
+          <p class="modal-subtitle">Fill in the details to create a new teacher account.</p>
+        </div>
+      </div>
+      <button class="modal-close-btn" (click)="closeModal()"><lucide-icon name="x" [size]="18"></lucide-icon></button>
+    </div>
+
+    <div class="modal-form">
+      <div>
+        <label>First Name</label>
+        <div class="input-icon">
+          <lucide-icon name="user" [size]="14"></lucide-icon>
+          <input [(ngModel)]="form.first_name" placeholder="Enter first name" />
+        </div>
+      </div>
+      <div>
+        <label>Last Name</label>
+        <div class="input-icon">
+          <lucide-icon name="user" [size]="14"></lucide-icon>
+          <input [(ngModel)]="form.last_name" placeholder="Enter last name" />
+        </div>
+      </div>
+      <div>
+        <label>Email</label>
+        <div class="input-icon">
+          <lucide-icon name="mail" [size]="14"></lucide-icon>
+          <input type="email" [(ngModel)]="form.email" placeholder="teacher@example.com" />
+        </div>
+      </div>
+      <div>
+        <label>Password</label>
+        <div class="input-icon">
+          <lucide-icon name="lock" [size]="14"></lucide-icon>
+          <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="form.password" placeholder="Enter password" />
+          <lucide-icon name="eye" [size]="14" class="toggle-eye" (click)="showPassword = !showPassword"></lucide-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+      <button class="btn-primary flex-1" [disabled]="isSaving" (click)="submitCreate()">
+        {{ isSaving ? 'Création...' : 'Create Teacher' }}
+      </button>
+    </div>
+  </div>
+</div>

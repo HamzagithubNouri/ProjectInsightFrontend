@@ -7,11 +7,9 @@ import {
   Plus,
   Search,
   Crown,
-  CheckCircle,
-  XCircle,
   UserPlus,
   UserMinus,
-  GitBranch,
+  Users,
   X,
 } from 'lucide-angular';
 import { TeamsManagementComponent } from './teams-management.component';
@@ -25,7 +23,7 @@ const routes: Routes = [{ path: '', component: TeamsManagementComponent }];
     FormsModule,
     RouterModule.forChild(routes),
     LucideAngularModule.pick({
-      Plus, Search, Crown, CheckCircle, XCircle, UserPlus, UserMinus, GitBranch, X,
+      Plus, Search, Crown, UserPlus, UserMinus, Users, X,
     }),
   ],
 })

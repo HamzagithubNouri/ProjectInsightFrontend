@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Team, CreateTeamPayload } from '../models/team.model';
+import { CreateTeamPayload, AvailableStudent } from '../models/team.model';
 import { TeamMemberInfo, TeamRepositoryInfo } from './team-me.service';
 
 // Correspond exactement a TeamProjectDetailsOut (backend)
@@ -22,22 +22,29 @@ export class TeamService {
 
   constructor(private http: HttpClient) {}
 
-  // ATTENTION: cette route GET n'existe pas encore côté FastAPI (a ajouter)
-  getAll(classId?: number): Observable<Team[]> {
-    const url = classId ? `${this.base}?class_id=${classId}` : this.base;
-    return this.http.get<Team[]>(url);
+  create(payload: CreateTeamPayload): Observable<unknown> {
+    return this.http.post(this.base, payload);
   }
 
-  create(payload: CreateTeamPayload): Observable<Team> {
-    return this.http.post<Team>(this.base, payload);
+  // GET /teacher/teams/{team_id}/details -> repo + membres + stats GitHub
+  // Reutilise ici uniquement pour recuperer .members (liste "Remove Member")
+  getProjectDetails(teamId: number): Observable<TeamProjectDetails> {
+    return this.http.get<TeamProjectDetails>(`${this.base}/${teamId}/details`);
   }
 
-  addMember(teamId: number, studentId: number): Observable<any> {
+  // GET /teacher/teams/{team_id}/available-students -> etudiants de la classe
+  // pas encore membres de l'equipe, alimente le modal "Add Member"
+  getAvailableStudents(teamId: number): Observable<AvailableStudent[]> {
+    return this.http.get<AvailableStudent[]>(`${this.base}/${teamId}/available-students`);
+  }
+
+  // POST /teacher/teams/{team_id}/members
+  addMember(teamId: number, studentId: number): Observable<unknown> {
     return this.http.post(`${this.base}/${teamId}/members`, { student_id: studentId });
   }
 
-  // GET /teacher/teams/{team_id}/details -> repo + membres + stats GitHub, en un seul appel
-  getProjectDetails(teamId: number): Observable<TeamProjectDetails> {
-    return this.http.get<TeamProjectDetails>(`${this.base}/${teamId}/details`);
+  // DELETE /teacher/teams/{team_id}/members/{student_id}
+  removeMember(teamId: number, studentId: number): Observable<unknown> {
+    return this.http.delete(`${this.base}/${teamId}/members/${studentId}`);
   }
 }

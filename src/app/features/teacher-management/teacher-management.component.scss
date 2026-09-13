@@ -1,0 +1,54 @@
+@import '../../shared/styles/admin-page';
+
+.teachers-table {
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead tr { background: #FAFAFA; border-bottom: 1px solid #F3F4F6; }
+  th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 600; color: #5B6275; }
+  tbody tr { border-bottom: 1px solid #F9FAFB; &:hover { background: #FAFAFA; } }
+  td { padding: 12px 16px; font-size: 14px; }
+}
+
+.cell-name { font-weight: 500; color: #0F0A3C; }
+.cell-muted { color: #5B6275; }
+
+.role-tag {
+  padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600;
+  background: #EEF2FF; color: #513BF6;
+}
+
+.cell-actions { display: flex; gap: 8px; }
+.icon-btn { padding: 6px; border-radius: 8px; }
+.icon-btn-edit { background: #EEF2FF; color: #513BF6; }
+.icon-btn-danger { background: #FEF2F2; color: #DC2626; }
+
+// Modal spécifique
+.modal-header-left { display: flex; gap: 12px; align-items: flex-start; }
+.modal-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: #EEF2FF; color: #513BF6;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.modal-subtitle { font-size: 12px; color: #5B6275; margin-top: 2px; }
+
+.input-icon {
+  position: relative;
+  display: flex; align-items: center;
+
+  lucide-icon:first-child {
+    position: absolute; left: 12px; color: #5B6275;
+  }
+
+  input {
+    padding-left: 34px;
+  }
+
+  .toggle-eye {
+    position: absolute; right: 12px; color: #5B6275; cursor: pointer;
+  }
+}

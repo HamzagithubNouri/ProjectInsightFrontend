@@ -37,7 +37,10 @@ export class AuthComponent {
     this.auth.login(email!, password!).subscribe({
       next: (user) => {
         this.isSubmitting = false;
-        const target = user.role === 'student' ? '/student' : '/teacher';
+        const target =
+          user.role === 'admin' ? '/admin'
+          : user.role === 'student' ? '/student'
+          : '/teacher';
         this.router.navigateByUrl(target);
       },
       error: () => {

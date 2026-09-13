@@ -1,0 +1,19 @@
+<div class="admin-shell">
+  <header class="admin-header">
+    <div class="brand">
+      <div class="logo-badge"><lucide-icon name="cpu" [size]="16" color="#fff"></lucide-icon></div>
+      <span class="brand-text">ProjectInsight <span class="brand-accent">AI</span></span>
+    </div>
+
+    <div class="flex-spacer"></div>
+
+    <div class="avatar">{{ auth.initials }}</div>
+    <button class="logout-btn" (click)="logout()">
+      <lucide-icon name="log-out" [size]="15"></lucide-icon> Déconnexion
+    </button>
+  </header>
+
+  <main class="admin-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

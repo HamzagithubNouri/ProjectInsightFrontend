@@ -1,5 +1,112 @@
-.signin-wrapper {
+.auth-page {
   min-height: 100vh;
+  display: flex;
+}
+
+// --- Panneau gauche (nouveau) ---
+.auth-hero {
+  flex: 1;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 56px;
+  background: radial-gradient(circle at 20% 20%, #2A1B6B 0%, #150B3D 55%, #0D0725 100%);
+  color: #fff;
+}
+
+.hero-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 64px;
+}
+
+.logo-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #513BF6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.hero-tagline h1 {
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+
+.tagline-accent {
+  color: #A78BFA;
+}
+
+.hero-subtitle {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 420px;
+  margin-bottom: 48px;
+}
+
+.hero-features {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.feature-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.feature-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+}
+
+.feature-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 2px;
+}
+
+.hero-footer {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+// Masque le panneau hero sur petit écran
+@media (max-width: 900px) {
+  .auth-hero {
+    display: none;
+  }
+}
+
+// --- TON formulaire existant, inchangé, juste adapté pour partager l'espace ---
+.signin-wrapper {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;

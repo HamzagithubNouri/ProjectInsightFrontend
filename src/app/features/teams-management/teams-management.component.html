@@ -4,7 +4,7 @@
       <h1 class="page-title">Teams</h1>
       <p class="page-subtitle">{{ teams.length }} teams across {{ classes.length }} classes</p>
     </div>
-    <button class="btn-primary" (click)="openModal()">
+    <button class="btn-primary" (click)="openCreateModal()">
       <lucide-icon name="plus" [size]="15"></lucide-icon> Create Team
     </button>
   </div>
@@ -12,7 +12,7 @@
   <div class="filters-row">
     <div class="search-box">
       <lucide-icon name="search" [size]="14" class="search-icon"></lucide-icon>
-      <input [(ngModel)]="search" placeholder="Search teams or leaders..." />
+      <input [(ngModel)]="search" placeholder="Search teams..." />
     </div>
     <select class="class-select" [(ngModel)]="classFilter">
       <option value="all">All classes</option>
@@ -23,62 +23,26 @@
   <p *ngIf="loading" class="hint-text">Chargement des équipes...</p>
   <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
 
-  <div class="teams-grid" *ngIf="!loading">
-    <div class="team-card" *ngFor="let team of filtered" (click)="openTeam()">
-      <div class="team-card-top">
+  <!-- Liste simplifiee : nom, nb membres, Add/Remove Member -->
+  <div class="team-list" *ngIf="!loading">
+    <div class="team-row" *ngFor="let team of filtered">
+      <div class="team-row-info">
+        <lucide-icon name="users" [size]="18" color="#513BF6"></lucide-icon>
         <div>
-          <h3 class="team-name">{{ team.name }}</h3>
-          <p class="team-class">{{ team.class_name }}</p>
-        </div>
-        <span
-          class="status-pill"
-          [style.background]="statusStyle(team.status).bg"
-          [style.color]="statusStyle(team.status).color"
-        >
-          {{ statusStyle(team.status).label }}
-        </span>
-      </div>
-
-      <p class="team-leader">
-        <lucide-icon name="crown" [size]="12" color="#EA580C"></lucide-icon>
-        {{ team.leader_name }} · {{ team.member_count }} members
-      </p>
-
-      <div class="team-stats">
-        <div class="stat-box">
-          <p class="stat-label">AI Score</p>
-          <p class="stat-value" [style.color]="scoreColor(team.ai_score)">{{ team.ai_score }}</p>
-        </div>
-        <div class="stat-box">
-          <p class="stat-label">Balance</p>
-          <p class="stat-value">{{ team.balance }}%</p>
+          <p class="team-row-name">{{ team.name }}</p>
+          <p class="team-row-meta">{{ team.member_count }} members · {{ team.class_name }}</p>
         </div>
       </div>
 
-      <div class="balance-row">
-        <div class="balance-row-top">
-          <span>Contribution balance</span>
-          <span [style.color]="(team.balance ?? 0) >= 70 ? '#16A34A' : '#EA580C'">{{ team.balance }}%</span>
-        </div>
-        <div class="progress-track">
-          <div
-            class="progress-fill"
-            [style.width.%]="team.balance ?? 0"
-            [style.background]="(team.balance ?? 0) >= 70 ? '#16A34A' : '#EA580C'"
-          ></div>
-        </div>
-      </div>
-
-      <div class="team-footer">
-        <div class="repo-status" [class.repo-ok]="team.repo_connected" [class.repo-ko]="!team.repo_connected">
-          <lucide-icon [name]="team.repo_connected ? 'check-circle' : 'x-circle'" [size]="13"></lucide-icon>
-          <span>{{ team.repo_connected ? 'Repository connected' : 'No repository' }}</span>
-        </div>
-        <div class="team-actions" (click)="$event.stopPropagation()">
-          <button class="icon-btn icon-btn-purple"><lucide-icon name="user-plus" [size]="12"></lucide-icon></button>
-          <button class="icon-btn icon-btn-red"><lucide-icon name="user-minus" [size]="12"></lucide-icon></button>
-          <button class="icon-btn icon-btn-grey"><lucide-icon name="git-branch" [size]="12"></lucide-icon></button>
-        </div>
+      <div class="team-row-actions">
+        <button class="action-btn action-add" (click)="openAddModal(team)" title="Add Member">
+          <lucide-icon name="user-plus" [size]="16"></lucide-icon>
+          <span>Add Member</span>
+        </button>
+        <button class="action-btn action-remove" (click)="openRemoveModal(team)" title="Remove Member">
+          <lucide-icon name="user-minus" [size]="16"></lucide-icon>
+          <span>Remove Member</span>
+        </button>
       </div>
     </div>
 
@@ -86,12 +50,12 @@
   </div>
 </div>
 
-<!-- Create Team Modal -->
-<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+<!-- ===================== Create Team Modal ===================== -->
+<div class="modal-overlay" *ngIf="showCreateModal" (click)="closeCreateModal()">
   <div class="modal-card" (click)="$event.stopPropagation()">
     <div class="modal-header-row">
       <h2 class="modal-title">Créer une équipe</h2>
-      <button class="modal-close-btn" (click)="closeModal()"><lucide-icon name="x" [size]="18"></lucide-icon></button>
+      <button class="modal-close-btn" (click)="closeCreateModal()"><lucide-icon name="x" [size]="18"></lucide-icon></button>
     </div>
 
     <div class="modal-form">
@@ -101,7 +65,7 @@
       </div>
       <div>
         <label>Classe</label>
-        <select [ngModel]="newTeamClassId" (ngModelChange)="onClassChange($event)">
+        <select [ngModel]="newTeamClassId" (ngModelChange)="onCreateClassChange($event)">
           <option *ngFor="let c of classes" [ngValue]="c.id">{{ c.name }}</option>
         </select>
       </div>
@@ -114,35 +78,121 @@
         </div>
         <div class="members-list">
           <div
-            *ngFor="let s of availableStudents"
+            *ngFor="let s of availableStudentsForCreate"
             class="member-row"
             [class.member-row-selected]="newTeamMembers.includes(s.id)"
           >
-            <div class="member-checkbox" [class.member-checkbox-checked]="newTeamMembers.includes(s.id)" (click)="toggleMember(s.id)">
+            <div class="member-checkbox" [class.member-checkbox-checked]="newTeamMembers.includes(s.id)" (click)="toggleCreateMember(s.id)">
               <span *ngIf="newTeamMembers.includes(s.id)">✓</span>
             </div>
-            <span class="member-name" (click)="toggleMember(s.id)">{{ s.first_name }} {{ s.last_name }}</span>
+            <span class="member-name" (click)="toggleCreateMember(s.id)">{{ s.first_name }} {{ s.last_name }}</span>
 
             <button
               *ngIf="newTeamMembers.includes(s.id)"
               type="button"
               class="leader-badge"
               [class.leader-badge-active]="newTeamLeaderId === s.id"
-              (click)="setLeader(s.id)"
+              (click)="setCreateLeader(s.id)"
             >
               <lucide-icon name="crown" [size]="12"></lucide-icon>
               {{ newTeamLeaderId === s.id ? 'Leader' : 'Définir leader' }}
             </button>
           </div>
-          <p *ngIf="availableStudents.length === 0" class="hint-text">Aucun étudiant dans cette classe.</p>
+          <p *ngIf="availableStudentsForCreate.length === 0" class="hint-text">Aucun étudiant dans cette classe.</p>
         </div>
       </div>
     </div>
 
     <div class="modal-actions">
-      <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+      <button class="btn-cancel" (click)="closeCreateModal()">Cancel</button>
       <button class="btn-primary flex-1" [disabled]="!newTeamName.trim() || isSaving" (click)="submitCreate()">
         {{ isSaving ? 'Création...' : "Créer l'équipe" }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Add Member Modal ===================== -->
+<div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header-row">
+      <h2 class="modal-title">Add Member to {{ addModalTeam?.name }}</h2>
+      <button class="modal-close-btn" (click)="closeAddModal()"><lucide-icon name="x" [size]="18"></lucide-icon></button>
+    </div>
+    <p class="modal-subtitle">Select a student to add to this team.</p>
+
+    <div class="modal-search-box">
+      <lucide-icon name="search" [size]="14" class="search-icon"></lucide-icon>
+      <input [(ngModel)]="addModalSearch" placeholder="Search students by name or email..." />
+    </div>
+
+    <p *ngIf="addModalLoading" class="hint-text">Chargement...</p>
+    <p *ngIf="addModalError" class="error-text">{{ addModalError }}</p>
+
+    <div class="selectable-list" *ngIf="!addModalLoading">
+      <p class="selectable-list-label">Available Students</p>
+
+      <div
+        class="selectable-row"
+        *ngFor="let s of filteredAddModalStudents"
+        [class.selectable-row-active]="addModalSelectedId === s.id"
+        (click)="addModalSelectedId = s.id"
+      >
+        <span class="radio-dot" [class.radio-dot-checked]="addModalSelectedId === s.id"></span>
+        <div>
+          <p class="selectable-name">{{ s.first_name }} {{ s.last_name }}</p>
+          <p class="selectable-email">{{ s.email }}</p>
+        </div>
+      </div>
+
+      <p *ngIf="filteredAddModalStudents.length === 0" class="hint-text">Aucun étudiant disponible.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeAddModal()">Cancel</button>
+      <button class="btn-primary flex-1" [disabled]="!addModalSelectedId || addModalSaving" (click)="confirmAddMember()">
+        {{ addModalSaving ? 'Ajout...' : 'Add Member' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Remove Member Modal ===================== -->
+<div class="modal-overlay" *ngIf="showRemoveModal" (click)="closeRemoveModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header-row">
+      <h2 class="modal-title">Remove Member from {{ removeModalTeam?.name }}</h2>
+      <button class="modal-close-btn" (click)="closeRemoveModal()"><lucide-icon name="x" [size]="18"></lucide-icon></button>
+    </div>
+    <p class="modal-subtitle">Select a member to remove from this team.</p>
+
+    <p *ngIf="removeModalLoading" class="hint-text">Chargement...</p>
+    <p *ngIf="removeModalError" class="error-text">{{ removeModalError }}</p>
+
+    <div class="selectable-list" *ngIf="!removeModalLoading">
+      <div
+        class="selectable-row"
+        *ngFor="let m of removeModalMembers"
+        [class.selectable-row-active]="removeModalSelectedId === m.id"
+        (click)="removeModalSelectedId = m.id"
+      >
+        <span class="radio-dot radio-dot-danger" [class.radio-dot-checked]="removeModalSelectedId === m.id"></span>
+        <div>
+          <p class="selectable-name">
+            {{ m.first_name }} {{ m.last_name }}
+            <lucide-icon *ngIf="m.is_leader" name="crown" [size]="12" color="#EA580C"></lucide-icon>
+          </p>
+          <p class="selectable-email">{{ m.email }}</p>
+        </div>
+      </div>
+
+      <p *ngIf="removeModalMembers.length === 0" class="hint-text">Aucun membre dans cette équipe.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeRemoveModal()">Cancel</button>
+      <button class="btn-danger flex-1" [disabled]="!removeModalSelectedId || removeModalSaving" (click)="confirmRemoveMember()">
+        {{ removeModalSaving ? 'Suppression...' : 'Remove Member' }}
       </button>
     </div>
   </div>

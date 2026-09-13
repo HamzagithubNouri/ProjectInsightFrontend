@@ -1,18 +1,77 @@
-<div class="signin-wrapper">
-  <form class="signin-card" [formGroup]="form" (ngSubmit)="submit()">
-    <h1 class="signin-title">Connexion</h1>
- 
-    <label class="signin-label">Email</label>
-    <input class="signin-input" type="email" formControlName="email" placeholder="vous@etu.edu" />
- 
-    <label class="signin-label">Mot de passe</label>
-    <input class="signin-input" type="password" formControlName="password" placeholder="••••••••" />
- 
-    <p *ngIf="errorMessage" class="signin-error">{{ errorMessage }}</p>
- 
-    <button class="signin-btn" type="submit" [disabled]="isSubmitting">
-      {{ isSubmitting ? 'Connexion...' : 'Se connecter' }}
-    </button>
-  </form>
+<div class="auth-page">
+  <!-- Panneau gauche : branding (nouveau, cadre rouge de la capture) -->
+  <div class="auth-hero">
+    <div class="hero-content">
+      <div class="hero-logo">
+        <div class="logo-badge">
+          <lucide-icon name="cpu" [size]="18" color="#fff"></lucide-icon>
+        </div>
+        <span class="logo-text">ProjectInsight AI</span>
+      </div>
+
+      <div class="hero-tagline">
+        <h1>
+          Monitor. Analyze.<br />
+          <span class="tagline-accent">Improve.</span>
+        </h1>
+        <p class="hero-subtitle">
+          AI-powered code reviews and real-time project monitoring for university software
+          engineering teams.
+        </p>
+      </div>
+
+      <div class="hero-features">
+        <div class="feature-row">
+          <div class="feature-icon">
+            <lucide-icon name="git-branch" [size]="18" color="#C7B9FF"></lucide-icon>
+          </div>
+          <div>
+            <p class="feature-title">GitHub integration</p>
+            <p class="feature-desc">Sync repos automatically</p>
+          </div>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-icon">
+            <lucide-icon name="bar-chart-3" [size]="18" color="#C7B9FF"></lucide-icon>
+          </div>
+          <div>
+            <p class="feature-title">Live analytics</p>
+            <p class="feature-desc">Commits, PRs, quality scores</p>
+          </div>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-icon">
+            <lucide-icon name="shield" [size]="18" color="#C7B9FF"></lucide-icon>
+          </div>
+          <div>
+            <p class="feature-title">AI security scan</p>
+            <p class="feature-desc">Bandit, SonarQube-style checks</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hero-footer">© 2025 ProjectInsight AI · Université de Montréal</p>
+  </div>
+
+  <!-- Panneau droit : TON formulaire existant, inchangé -->
+  <div class="signin-wrapper">
+    <form class="signin-card" [formGroup]="form" (ngSubmit)="submit()">
+      <h1 class="signin-title">Connexion</h1>
+
+      <label class="signin-label">Email</label>
+      <input class="signin-input" type="email" formControlName="email" placeholder="vous@etu.edu" />
+
+      <label class="signin-label">Mot de passe</label>
+      <input class="signin-input" type="password" formControlName="password" placeholder="••••••••" />
+
+      <p *ngIf="errorMessage" class="signin-error">{{ errorMessage }}</p>
+
+      <button class="signin-btn" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Connexion...' : 'Se connecter' }}
+      </button>
+    </form>
+  </div>
 </div>
- 

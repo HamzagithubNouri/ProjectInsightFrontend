@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StudentLayoutModule } from './layouts/student-layout/student-layout.module';
 import { TeacherLayoutModule } from './layouts/teacher-layout/teacher-layout.module';
+import { AdminLayoutModule } from './layouts/admin-layout/admin-layout.module';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 @NgModule({
@@ -17,7 +18,8 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
     HttpClientModule,
     AppRoutingModule,
     StudentLayoutModule,
-    TeacherLayoutModule
+    TeacherLayoutModule,
+    AdminLayoutModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
